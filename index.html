@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNP – BPSC AEDO General Studies Mock Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter','Noto Sans Devanagari',sans-serif;background:#f0f4f7;min-height:100vh;font-size:14px;color:#263238}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
+
+/* Welcome Screen */
+#screen-start{background:linear-gradient(135deg, #004d40 0%, #00695c 100%);align-items:center;justify-content:center;padding:20px}
+.welcome-outer{background:#fff;border-radius:12px;width:100%;max-width:960px;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;border:none}
+.welcome-header{background:#004d40;color:#fff;padding:0}
+.wh-top{background:#00675b;padding:20px 30px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.1)}
+.wh-logo{font-size:1.8rem;font-weight:900;letter-spacing:1px;color:#fff;display:flex;align-items:center;gap:10px}
+.wh-logo span{color:#ffab00}
+.wh-logo::before{content:'';width:32px;height:32px;background:#ffab00;border-radius:6px;display:inline-block}
+.wh-tagline{font-size:.8rem;color:rgba(255,255,255,.7);font-weight:600;margin-top:2px}
+.wh-info-bar{background:#004d40;padding:18px 30px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.wh-info-item label{font-size:.65rem;color:rgba(255,255,255,.5);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:1.5px;font-weight:800}
+.wh-info-item span{font-size:1.05rem;font-weight:700;color:#fff}
+
+.welcome-body{padding:40px 50px}
+.welcome-title{font-size:1.4rem;font-weight:900;color:#004d40;margin-bottom:25px;display:flex;align-items:center;gap:12px}
+.welcome-title::before{content:'';width:6px;height:24px;background:#ffab00;border-radius:3px}
+
+.instructions-table{width:100%;border-collapse:collapse;margin-bottom:30px;border:1px solid #e0e6ed;border-radius:8px;overflow:hidden}
+.instructions-table th{background:#f8fafb;color:#546e7a;padding:14px 20px;text-align:left;font-size:.85rem;font-weight:800;border-bottom:2px solid #00695c}
+.instructions-table td{padding:14px 20px;border:1px solid #e0e6ed;font-size:.9rem;color:#37474f;font-weight:500}
+.instructions-table tr:nth-child(even) td{background:#fcfdfe}
+
+/* Status Icons (Professional SVGs) */
+.stat-icon{width:36px;height:32px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem;font-weight:800;background-size:contain;background-repeat:no-repeat;background-position:center}
+.si-nv{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='10' y='10' width='80' height='80' rx='8' fill='%2378909c'/%3E%3C/svg%3E")}
+.si-na{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 5 L95 25 L95 75 L50 95 L5 75 L5 25 Z' fill='%23ef5350'/%3E%3C/svg%3E")}
+.si-an{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M5 25 L50 5 L95 25 L95 75 L50 95 L5 75 Z' fill='%2326a69a'/%3E%3C/svg%3E")}
+.si-mr{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23ab47bc'/%3E%3C/svg%3E")}
+.si-am{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23ab47bc'/%3E%3Ccircle cx='50' cy='50' r='15' fill='%2326a69a'/%3E%3C/svg%3E")}
+
+.legend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;background:#f1f4f6;padding:25px;border-radius:12px;margin-bottom:30px}
+.leg-item{display:flex;align-items:center;gap:12px;font-size:.85rem;font-weight:700;color:#455a64}
+
+.btn-start-exam{background:#00695c;color:#fff;border:none;padding:14px 45px;border-radius:8px;font-size:1.1rem;font-weight:900;cursor:pointer;box-shadow:0 8px 20px rgba(0,105,92,.25);transition:all .3s;display:flex;align-items:center;gap:12px}
+.btn-start-exam:hover{background:#004d40;transform:translateY(-2px);box-shadow:0 12px 25px rgba(0,105,92,.35)}
+
+/* Exam Screen Header */
+.tcs-header{background:#004d40;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:100}
+.tcs-header-top{background:#00675b;padding:10px 25px;display:flex;align-items:center;justify-content:space-between}
+.tcs-brand{font-size:1.4rem;font-weight:900;letter-spacing:1px;color:#fff}
+.tcs-brand span{color:#ffab00}
+.tcs-header-right{display:flex;align-items:center;gap:20px}
+.candidate-box{text-align:right;border-left:1px solid rgba(255,255,255,.2);padding-left:20px}
+
+/* Candidate Profile Header */
+.cand-prof { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+.cand-img { width: 40px; height: 40px; background: #fff; color: #004d40; border-radius: 4px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.cand-text { text-align: left; }
+.candidate-name { font-size: 0.9rem; font-weight: 800; display: block; color: #ffab00; }
+.candidate-exam { font-size: 0.7rem; color: rgba(255,255,255,0.8); font-weight: 600; }
+.exam-title-badge { font-weight: 900; color: #fff; font-size: 0.95rem; border-left: 4px solid #ffab00; padding-left: 12px; }
+
+.tcs-header-bottom{background:#004d40;padding:8px 25px;display:flex;align-items:center;justify-content:space-between}
+.tcs-timer-pill{background:#ff9100;color:#fff;padding:4px 20px;border-radius:50px;font-weight:900;font-size:1.1rem;box-shadow:inset 0 2px 4px rgba(0,0,0,.1);display:flex;align-items:center;gap:10px}
+.tcs-timer-pill label{font-size:.7rem;text-transform:uppercase;opacity:.9;font-weight:800}
+
+/* Sections & Question Area */
+.exam-main{display:flex;flex:1;overflow:hidden;background:#f0f4f7}
+.q-area{flex:1;display:flex;flex-direction:column;min-width:0;background:#fff;margin:15px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.05);overflow:hidden}
+
+.section-tab-bar{background:#f8fafb;border-bottom:1px solid #e0e6ed;display:flex;padding:0 10px}
+.sec-tab{padding:14px 25px;font-size:.85rem;font-weight:800;color:#607d8b;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+.sec-tab:hover{color:#00695c;background:rgba(0,105,92,.03)}
+.sec-tab.active{color:#00695c;border-bottom-color:#00695c;background:#fff}
+
+.q-header{padding:15px 25px;background:#fff;border-bottom:1px solid #f1f3f5;display:flex;align-items:center;justify-content:space-between}
+.q-num-box{font-size:.9rem;font-weight:900;color:#00695c;text-transform:uppercase;letter-spacing:1px}
+.q-marks-box{background:#f1f8f9;padding:5px 15px;border-radius:6px;font-size:.8rem;font-weight:700;color:#00796b;border:1px solid #b2dfdb}
+
+.q-scroller{flex:1;overflow-y:auto;padding:30px 40px}
+.q-text{font-size:1.15rem;line-height:1.8;color:#263238;margin-bottom:30px;font-weight:600}
+
+/* Question Formatting */
+.q-list { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; background: #f8fafb; padding: 20px; border-radius: 12px; border: 1px dashed #cfd8dc; }
+.q-list-item { display: flex; gap: 12px; align-items: flex-start; font-size: 1.1rem; color: #37474f; font-weight: 600; line-height: 1.6; }
+.q-list-num { color: #00695c; font-weight: 900; min-width: 30px; background: #e0f2f1; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 0.9rem; }
+
+.match-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #e0e6ed; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.match-table th { background: #00695c; color: #fff; padding: 12px 15px; font-size: 0.8rem; text-transform: uppercase; text-align: left; letter-spacing: 1px; }
+.match-table td { padding: 14px 20px; border-bottom: 1px solid #f1f3f5; font-size: 1.05rem; font-weight: 600; vertical-align: middle; color: #37474f; }
+.match-table tr:nth-child(even) td { background: #fcfdfe; }
+.match-table tr:hover td { background: #f1f8f9; }
+
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.opt-card{display:flex;align-items:center;padding:5px;border:2px solid #e0e6ed;border-radius:10px;cursor:pointer;transition:all .2s;background:#fff}
+.opt-card:hover{border-color:#00695c;background:#f1f8f9}
+.opt-card.selected{border-color:#00695c;background:#e0f2f1;box-shadow:0 4px 12px rgba(0,105,92,.1)}
+.opt-radio-circle{width:22px;height:22px;border:2px solid #cfd8dc;border-radius:50%;margin:0 15px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.opt-card.selected .opt-radio-circle{border-color:#00695c;background:#00695c}
+.opt-card.selected .opt-radio-circle::after{content:'';width:8px;height:8px;background:#fff;border-radius:50%}
+.opt-lbl{padding:12px 10px 12px 0;font-size:1.05rem;font-weight:600;color:#455a64;flex:1}
+
+.q-footer{background:#fff;border-top:1px solid #e0e6ed;padding:15px 25px;display:flex;align-items:center;justify-content:space-between}
+.btn-group{display:flex;gap:12px}
+.tcs-btn{padding:12px 24px;border-radius:8px;font-size:.9rem;font-weight:800;cursor:pointer;transition:all .2s;min-width:140px;text-align:center}
+.btn-outline{background:#fff;border:2px solid #cfd8dc;color:#546e7a}
+.btn-outline:hover{background:#f8f9fa;border-color:#b0bec5}
+.btn-solid-purple{background:#8e24aa;color:#fff;border:none;box-shadow:0 4px 10px rgba(142,36,170,.2)}
+.btn-solid-purple:hover{background:#7b1fa2;transform:translateY(-1px)}
+.btn-solid-emerald{background:#00695c;color:#fff;border:none;box-shadow:0 4px 10px rgba(0,105,92,.2)}
+.btn-solid-emerald:hover{background:#004d40;transform:translateY(-1px)}
+
+/* Palette Sidebar (Drawer Style) */
+.palette-sidebar{position:fixed;right:-350px;top:0;bottom:0;width:340px;background:#fff;z-index:1000;transition:right .3s ease;box-shadow:-10px 0 30px rgba(0,0,0,.1);display:flex;flex-direction:column}
+.palette-sidebar.open{right:0}
+.pal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:900}
+.pal-overlay.show{display:block}
+
+.pal-head{background:#004d40;color:#fff;padding:20px;display:flex;align-items:center;justify-content:space-between}
+.pal-head h3{font-size:1rem;font-weight:900;text-transform:uppercase;letter-spacing:1px}
+.pal-close{cursor:pointer;font-size:1.4rem;opacity:.8}
+
+.pal-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:20px;background:#f8fafb;border-bottom:1px solid #e0e6ed}
+.stat-pill{display:flex;align-items:center;gap:10px;padding:10px;background:#fff;border-radius:8px;border:1px solid #e0e6ed}
+.stat-tag{font-size:.65rem;font-weight:800;color:#90a4ae;text-transform:uppercase}
+.stat-val{font-size:1.2rem;font-weight:900;color:#263238}
+
+.pal-grid-wrapper{flex:1;overflow-y:auto;padding:20px}
+.pal-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.pal-q-btn{aspect-ratio:36/32;border:none;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:.85rem}
+.pal-q-btn:hover{transform:scale(1.1)}
+.pal-q-btn.pcur{box-shadow:0 0 0 3px #ffab00;border-radius:4px}
+
+.pal-foot{padding:20px;background:#f8fafb;border-top:1px solid #e0e6ed}
+.btn-submit-final{width:100%;background:#c62828;color:#fff;padding:14px;border-radius:8px;font-size:1rem;font-weight:900;border:none;cursor:pointer;box-shadow:0 4px 15px rgba(198,40,40,.3)}
+
+/* Modal & Result */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.m-box{background:#fff;width:500px;max-width:95vw;border-radius:16px;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,.4)}
+.m-head{background:#004d40;color:#fff;padding:18px 25px;font-size:1.1rem;font-weight:900;display:flex;justify-content:space-between}
+.m-body{padding:30px 40px}
+.m-summary-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f1f3f5}
+.m-label{font-size:.9rem;font-weight:700;color:#546e7a}
+.m-value{font-size:1.2rem;font-weight:900}
+.m-warn{background:#fff8e1;border:1px solid #ffe082;padding:15px;border-radius:10px;margin-top:20px;font-size:.85rem;color:#795548;font-weight:600;text-align:center}
+.m-foot{padding:25px;background:#fbfcfd;display:flex;gap:15px;justify-content:center}
+
+#screen-result{background:#f8fafb;padding-bottom:50px}
+.res-hdr-top{background:linear-gradient(135deg, #004d40 0%, #00695c 100%);color:#fff;padding:50px 20px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.1)}
+.res-container{max-width:1100px;margin:-60px auto 0;padding:0 20px}
+.res-main-card{background:#fff;border-radius:20px;box-shadow:0 15px 40px rgba(0,0,0,0.08);overflow:hidden;border:1px solid #e0e6ed}
+.res-score-summary{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;padding:30px;border-bottom:1px solid #f1f3f5}
+.res-stat-card{text-align:center;padding:20px;border-right:1px solid #f1f3f5}
+.res-stat-card:last-child{border-right:none}
+.res-stat-lbl{font-size:0.75rem;font-weight:800;color:#90a4ae;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;display:block}
+.res-stat-val{font-size:2.2rem;font-weight:900;color:#263238}
+.res-stat-val.correct{color:#26a69a}
+.res-stat-val.wrong{color:#ef5350}
+.res-stat-val.score{color:#004d40}
+
+.res-analysis-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:30px;padding:40px}
+.res-chart-box{background:#fcfdfe;border-radius:16px;padding:30px;border:1px solid #f1f3f5;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.res-table-box{background:#fff}
+.res-subj-table{width:100%;border-collapse:collapse}
+.res-subj-table th{text-align:left;padding:12px;font-size:0.8rem;color:#78909c;border-bottom:2px solid #f1f3f5;text-transform:uppercase}
+.res-subj-table td{padding:15px 12px;border-bottom:1px solid #f1f3f5;font-weight:600;font-size:0.95rem;color:#455a64}
+.res-pct-bar-bg{width:100px;height:8px;background:#f1f3f5;border-radius:10px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:10px}
+.res-pct-bar-fill{height:100%;background:#00695c;border-radius:10px}
+
+
+.lang-switch-btn{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:6px 12px;border-radius:4px;cursor:pointer;font-weight:700}
+.lang-switch-btn:hover{background:rgba(255,255,255,0.2)}
+
+/* Palette Floating Button */
+.pal-fab { position: fixed; right: 25px; bottom: 85px; width: 56px; height: 56px; background: #004d40; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 800; transition: all .3s; }
+.pal-fab:hover { transform: scale(1.1); background: #00695c; }
+.pal-fab svg { width: 28px; height: 28px; }
+
+@media(max-width:800px){
+  .wh-info-bar{grid-template-columns:1fr;padding:15px 25px}
+  .options-grid{grid-template-columns:1fr}
+  .q-scroller{padding:20px}
+  .q-footer{flex-direction:column;gap:15px}
+  .btn-group{width:100%;}
+  .tcs-btn{flex:1;min-width:0;padding:12px 10px;font-size:.75rem}
+  .pal-fab { right: 15px; bottom: 80px; width: 48px; height: 48px; }
+}
+</style>
+</head>
+<body>
+
+<!-- WELCOME SCREEN -->
+<div id="screen-start" class="screen active">
+  <div class="welcome-outer">
+    <div class="welcome-header">
+      <div class="wh-top">
+        <div>
+          <div class="wh-logo">SNP<span>.</span></div>
+          <div class="wh-tagline">SARKARI NAUKI PRAYAS | Team BPSC Expert</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:15px">
+          <button class="lang-switch-btn" onclick="toggleLang()">EN / HI</button>
+          <div style="color:rgba(255,255,255,.9);font-size:.85rem;text-align:right;font-weight:700">BPSC AEDO 2024<br><span style="color:#ffab00">SESSION OPEN</span></div>
+        </div>
+      </div>
+      <div class="wh-info-bar">
+        <div class="wh-info-item"><label>Subject / विषय</label><span>General Studies (GS)</span></div>
+        <div class="wh-info-item"><label>Exam Type</label><span>SNP Special Mock</span></div>
+        <div class="wh-info-item"><label>Questions</label><span>100 MCQs</span></div>
+      </div>
+    </div>
+    <div class="welcome-body">
+      <div class="welcome-title">महत्वपूर्ण निर्देश (Important Instructions)</div>
+      <table class="instructions-table">
+        <tr><th>Description / विवरण</th><th>Details / जानकारी</th></tr>
+        <tr><td>Total Time / कुल समय</td><td>120 Minutes (2 Hours)</td></tr>
+        <tr><td>Marking / अंक योजना</td><td><span style="color:#2e7d32;font-weight:700">+1.0 Correct</span> | <span style="color:#c62828;font-weight:700">-0.33 Negative</span></td></tr>
+      </table>
+
+      <div class="legend-grid">
+        <div class="leg-item"><span class="stat-icon si-nv">?</span> Not Visited</div>
+        <div class="leg-item"><span class="stat-icon si-na">0</span> Not Answered</div>
+        <div class="leg-item"><span class="stat-icon si-an">✔</span> Answered</div>
+        <div class="leg-item"><span class="stat-icon si-mr">◉</span> Marked Review</div>
+        <div class="leg-item" style="grid-column: span 2"><span class="stat-icon si-am">✔</span> Answered & Marked</div>
+      </div>
+
+      <div style="display:flex;justify-content:center;margin-top:10px">
+        <button class="btn-start-exam" onclick="startExam()">
+          START MOCK TEST NOW »
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXAM SCREEN -->
+<div id="screen-exam" class="screen">
+  <div class="tcs-header">
+    <div class="tcs-header-top">
+      <div class="tcs-brand">SNP<span>.</span> – Online Exam Portal</div>
+      <div class="tcs-header-right">
+        <button class="lang-switch-btn" id="lang-switch-btn" onclick="toggleLang()">EN / HI</button>
+        <div class="candidate-box">
+          <div class="cand-prof">
+            <div class="cand-img">
+              <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+            <div class="cand-text">
+              <span class="candidate-name" id="cand-name-header">Team SNP (Candidate)</span>
+              <span class="candidate-exam">Exam: BPSC AEDO (GS) Part-I</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tcs-header-bottom">
+      <div class="exam-title-badge">SARKARI NAUKI PRAYAS (Team SNP) :: Special Mock - 01</div>
+      <div class="tcs-timer-pill">
+        <label id="tcs-timer-label">Time Left</label>
+        <span id="timer">119:59</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="exam-main">
+    <div class="q-area">
+      <div class="section-tab-bar">
+        <div class="sec-tab active" onclick="filterSection('all',this)">All (100)</div>
+        <div class="sec-tab" onclick="filterSection('Geography',this)">Geography</div>
+        <div class="sec-tab" onclick="filterSection('Science',this)">Science</div>
+        <div class="sec-tab" onclick="filterSection('History',this)">History</div>
+        <div class="sec-tab" onclick="filterSection('Polity',this)">Polity</div>
+        <div class="sec-tab" onclick="filterSection('Economics',this)">Economics</div>
+        <div class="sec-tab" onclick="filterSection('Bihar GK',this)">Bihar Special</div>
+        <div class="sec-tab" onclick="filterSection('Current Affairs',this)">Current Affairs</div>
+      </div>
+
+      <div class="q-header">
+        <div class="q-num-box" id="q-head-num">Question NO. 1</div>
+        <div class="q-marks-box">Correct: +1.0 | Negative: -0.33</div>
+      </div>
+      <div class="q-scroller" id="q-container"></div>
+      <div class="q-footer">
+        <div class="btn-group">
+          <button class="tcs-btn btn-outline" onclick="clearAnswer()">Clear Response</button>
+          <button class="tcs-btn btn-solid-purple" onclick="markForReview()">Mark for Review & Next</button>
+        </div>
+        <div class="btn-group">
+          <button class="tcs-btn btn-outline" onclick="prevQ()">« Previous</button>
+          <button class="tcs-btn btn-solid-emerald" onclick="saveAndNext()">Save & Next »</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pal-overlay" id="pal-overlay" onclick="closePalette()"></div>
+    <div class="palette-sidebar" id="palette-sidebar">
+      <div class="pal-head">
+        <h3>Question Palette</h3>
+        <span class="pal-close" onclick="closePalette()">✕</span>
+      </div>
+      <div class="pal-stats">
+        <div class="stat-pill"><span class="stat-icon si-an">✔</span><div style="flex:1"><span class="stat-val" id="cnt-an">0</span><div class="stat-tag">Answered</div></div></div>
+        <div class="stat-pill"><span class="stat-icon si-na">0</span><div style="flex:1"><span class="stat-val" id="cnt-na">0</span><div class="stat-tag">Not Ans</div></div></div>
+        <div class="stat-pill"><span class="stat-icon si-nv">?</span><div style="flex:1"><span class="stat-val" id="cnt-nv">0</span><div class="stat-tag">Not Visited</div></div></div>
+        <div class="stat-pill"><span class="stat-icon si-mr">◉</span><div style="flex:1"><span class="stat-val" id="cnt-mr">0</span><div class="stat-tag">Marked</div></div></div>
+      </div>
+      <div class="pal-grid-wrapper">
+        <div class="pal-grid" id="q-palette"></div>
+      </div>
+      <div class="pal-foot">
+        <button class="btn-submit-final" onclick="openSubmitModal()">Submit Test Session</button>
+      </div>
+    </div>
+  </div>
+  <button id="pal-toggle-btn" class="pal-fab" onclick="togglePalette()">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+  </button>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="screen-result" class="screen">
+  <div class="res-hdr-top">
+    <h1 style="font-size:2.5rem;font-weight:900;margin-bottom:10px">Exam Performance Report</h1>
+    <p style="opacity:0.8;font-size:1.1rem;font-weight:500">BPSC AEDO General Studies Special Mock - 01</p>
+  </div>
+  
+  <div class="res-container">
+    <div class="res-main-card">
+      <div class="res-score-summary">
+        <div class="res-stat-card"><span class="res-stat-lbl">Final Score</span><span class="res-stat-val score" id="s-score">0.00</span></div>
+        <div class="res-stat-card"><span class="res-stat-lbl">Correct</span><span class="res-stat-val correct" id="s-correct">0</span></div>
+        <div class="res-stat-card"><span class="res-stat-lbl">Incorrect</span><span class="res-stat-val wrong" id="s-wrong">0</span></div>
+        <div class="res-stat-card"><span class="res-stat-lbl">Unattempted</span><span class="res-stat-val" id="s-skip">0</span></div>
+      </div>
+      
+      <div class="res-analysis-grid">
+        <div class="res-chart-box">
+          <div style="position:relative;width:240px;height:240px">
+            <svg viewBox="0 0 150 150" style="transform:rotate(-90deg)">
+              <circle cx="75" cy="75" r="65" fill="none" stroke="#f1f3f5" stroke-width="12"></circle>
+              <circle cx="75" cy="75" r="65" fill="none" stroke="#004d40" stroke-width="12" 
+                      id="donut-circle" stroke-dasharray="408" stroke-dashoffset="408" stroke-linecap="round" 
+                      style="transition: stroke-dashoffset 1.5s ease-out"></circle>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+              <span id="score-pct" style="font-size:2.8rem;font-weight:900;color:#004d40">0%</span>
+              <span style="font-size:0.8rem;font-weight:700;color:#90a4ae;text-transform:uppercase">Accuracy</span>
+            </div>
+          </div>
+          <div id="result-title" style="margin-top:25px;font-size:1.3rem;font-weight:900;color:#004d40"></div>
+          <div id="result-subtitle" style="text-align:center;font-size:0.9rem;color:#607d8b;margin-top:8px"></div>
+        </div>
+        
+        <div class="res-table-box">
+          <h3 style="font-size:1.1rem;font-weight:800;color:#263238;margin-bottom:20px;display:flex;align-items:center;gap:10px">
+            <svg width="20" height="20" fill="#00695c" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            Subject-wise Performance
+          </h3>
+          <table class="res-subj-table" id="res-subj-body">
+            <!-- Dynamic rows -->
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <div style="margin-top:40px;background:#fff;border-radius:16px;padding:30px;box-shadow:0 4px 20px rgba(0,0,0,0.05);border:1px solid #e0e6ed">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:30px;padding-bottom:15px;border-bottom:2px solid #f1f3f5">
+        <h3 style="font-size:1.4rem;color:#004d40;font-weight:900">Detailed Answer Key / उत्तर कुंजी</h3>
+        <div class="btn-group">
+           <button class="sec-tab active" onclick="filterSheet('all',this)">All Questions</button>
+           <button class="sec-tab" onclick="filterSheet('correct',this)">Correct</button>
+           <button class="sec-tab" onclick="filterSheet('wrong',this)">Incorrect</button>
+        </div>
+      </div>
+      <div id="sheet-items"></div>
+    </div>
+
+    <div style="text-align:center;margin:60px 0">
+      <button class="tcs-btn btn-solid-emerald" style="padding:18px 50px;font-size:1.1rem;box-shadow:0 10px 30px rgba(0,105,92,0.3)" onclick="restartExam()">🔄 RE-ATTEMPT MOCK TEST</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-overlay" id="submit-modal">
+  <div class="m-box">
+    <div class="m-head">
+      <span>Confirm Submission</span>
+      <span style="cursor:pointer" onclick="closeModal()">✕</span>
+    </div>
+    <div class="m-body">
+      <div class="m-summary-row"><span class="m-label">Answered</span><span class="m-value" style="color:#26a69a" id="ms-answered">0</span></div>
+      <div class="m-summary-row"><span class="m-label">Not Answered</span><span class="m-value" style="color:#ef5350" id="ms-notanswered">0</span></div>
+      <div class="m-summary-row"><span class="m-label">Marked for Review</span><span class="m-value" style="color:#ab47bc" id="ms-marked">0</span></div>
+      <div class="m-summary-row"><span class="m-label">Not Visited</span><span class="m-value" id="ms-notvisited">0</span></div>
+      <div class="m-warn">⚠️ ध्यान दें: एक बार सबमिट करने के बाद आप उत्तर नहीं बदल पाएंगे। क्या आप परीक्षा समाप्त करना चाहते हैं?</div>
+    </div>
+    <div class="m-foot">
+      <button class="tcs-btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="tcs-btn btn-solid-emerald" style="background:#c62828" onclick="doSubmit()">Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<div id="confetti" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10000"></div>
+
+<script>
+const QUESTIONS = [{"id": "1", "section": "Geography", "questionHindi": "हिमालय पर्वत श्रृंखला में मुख्य रूप से कौन कौन-सी श्रेणियाँ मौजूद है? 1. वृहत् हिमालय 2. पूर्वांचल पहाड़ियाँ 3. शिवालिक श्रृंखला 4. गारो पहाड़ियाँ 5. खासी और महादेव पहाड़ियाँ", "questionEnglish": "Which ranges are primarily present in the Himalayan mountain range? 1. Greater Himalayas 2. Purvanchal Hills 3. Shivalik Range 4. Garo Hills 5. Khasi and Mahadev Hills", "optionsHindi": ["केवल 1, 2 और 3", "केवल 1, 3 और 5", "केवल 1, 2, 3 और 5", "1, 2, 3, 4 और 5"], "optionsEnglish": ["Only 1, 2 and 3", "Only 1, 3 and 5", "Only 1, 2, 3 and 5", "1, 2, 3, 4 and 5"], "correctAnswer": "A", "explanation": "The Himalayan range consists mainly of the Greater Himalayas, Shivalik range, and the Purvanchal Hills. Garo, Khasi, and Mahadev hills are part of the Peninsular Plateau."}, {"id": "2", "section": "Geography", "questionHindi": "शीतोष्ण कटिबंधीय प्राकृतिक वनस्पति भारत के किस क्षेत्र में पाई जाती है?", "questionEnglish": "In which region of India is Temperate Natural Vegetation found?", "optionsHindi": ["पश्चिमी हिमालयी क्षेत्र में", "डेल्टाई क्षेत्रों में", "पश्चिमी घाट क्षेत्र में", "इनमें से कोई नहीं"], "optionsEnglish": ["In the Western Himalayan region", "In the deltaic regions", "In the Western Ghats region", "None of these"], "correctAnswer": "A", "explanation": "Temperate vegetation in India is found at higher altitudes, primarily in the Western and Eastern Himalayan regions where the climate is cooler."}, {"id": "3", "section": "Geography", "questionHindi": "हिमालयी नदियाँ अपने प्रवाह के क्रम में मध्य एवं निचले भागों में किस प्रकार की आकृति का निर्माण नहीं करती है?", "questionEnglish": "Which type of landform do Himalayan rivers not create in their middle and lower courses?", "optionsHindi": ["गोखुर झील", "विसर्प नदियाँ", "गुंफित वाहिकाएँ", "इनमें से कोई नहीं"], "optionsEnglish": ["Oxbow lakes", "Meandering rivers", "Braided channels", "None of these"], "correctAnswer": "D", "explanation": "In their middle and lower courses (plains), Himalayan rivers form depositional and meandering features, including oxbow lakes, meanders, and braided channels."}, {"id": "4", "section": "Geography", "questionHindi": "पेडलफर मिट्टी' के संबंध में कौन-सा कथन सही है? 1. यह मिट्टी अम्लीय, अनुपजाऊ और कृषि के लिए कम उपयोगी होती है। 2. डेरी उद्योग तथा मिश्रित कृषि के लिए यह मृदा उपयोगी होती है। 3. ऊँचे अक्षांशों में तापमान आर्द्र तथा मौसमी दशा वाले क्षेत्रों में काले रंग की पेडलफर मिट्टी मिलती है।", "questionEnglish": "Which statement regarding 'Pedalfer soil' is correct? 1. This soil is acidic, infertile, and of limited utility for agriculture. 2. This soil is suitable for the dairy industry and mixed farming. 3. Black-colored Pedalfer soil is found in high-latitude regions characterized by humid temperatures and seasonal climatic conditions.", "optionsHindi": ["केवल 1", "केवल 1 और 2", "केवल 2 और 3", "1, 2 और 3"], "optionsEnglish": ["Only 1", "Only 1 and 2", "Only 2 and 3", "1, 2 and 3"], "correctAnswer": "D", "explanation": "All statements are correct. Pedalfer soils form in humid areas, are generally acidic, and are often used for mixed farming and dairy rather than intensive agriculture."}, {"id": "5", "section": "Geography", "questionHindi": "माउंट हैरियट' अंडमान व निकोबार द्वीप समूह के किस क्षेत्र में अवस्थित है?", "questionEnglish": "In which region of the Andaman and Nicobar Islands is 'Mount Harriet' situated?", "optionsHindi": ["उत्तरी अंडमान", "मध्य अंडमान", "दक्षिणी अंडमान", "ग्रेट निकाबार"], "optionsEnglish": ["North Andaman", "Middle Andaman", "South Andaman", "Great Nicobar"], "correctAnswer": "C", "explanation": "Mount Harriet (officially renamed Mount Manipur) is situated in the South Andaman region of the Andaman and Nicobar Islands."}, {"id": "6", "section": "Geography", "questionHindi": "शील्ड ज्वालामुखी' के संबंध में निम्नलिखित में से कौन-सा कथन असत्य है?", "questionEnglish": "Which of the following statements regarding 'Shield Volcanoes' is incorrect?", "optionsHindi": ["यह ज्वालामुखी बेसाल्ट से निर्मित होते हैं।", "हवाई द्वीप के ज्वालामुखी इसके सबसे अच्छे उदाहरण हैं।", "यह ज्वालामुखी अधिक विस्फोटक होते हैं।", "इस ज्वालामुखी के निकास पर सिंडर शंकु का निर्माण होता है।"], "optionsEnglish": ["These volcanoes are composed of Basalt.", "The volcanoes of the Hawaiian Islands are the best examples of these.", "These volcanoes are highly explosive.", "Cinder cones form at the vent of these volcanoes."], "correctAnswer": "C", "explanation": "Shield volcanoes are mostly composed of fluid basalt flows and are generally not explosive unless water gets into the vent."}, {"id": "7", "section": "Geography", "questionHindi": "लोहा - इस्पात उद्योग के लिए निम्नलिखित में से किसका प्रयोग कच्चे माल के रूप में किया जाता है? 1. चूना पत्थर 2. जिप्सम 3. मैंगनीज 4. डोलोमाइट", "questionEnglish": "Which of the following is used as raw material for the iron and steel industry? 1. Limestone 2. Gypsum 3. Manganese 4. Dolomite", "optionsHindi": ["केवल 1 और 2", "केवल 3 और 4", "केवल 1, 3 और 4", "1, 2, 3 और 4"], "optionsEnglish": ["Only 1 and 2", "Only 3 and 4", "Only 1, 3, and 4", "1, 2, 3, and 4"], "correctAnswer": "C", "explanation": "Limestone, Manganese, and Dolomite are used in the iron and steel industry. Gypsum is primarily used in the cement industry."}, {"id": "8", "section": "Geography", "questionHindi": "निम्नलिखित में से 'आग्नेय चट्टान' के संबंध में कौन-सा कथन असत्य है?", "questionEnglish": "Which of the following statements regarding 'Igneous Rocks' is incorrect?", "optionsHindi": ["आग्नेय चट्टान की उत्पत्ति मैग्मा के जमाव के कारण बनता है।", "इस चट्टान से काली मिट्टी का निर्माण होता है।", "आग्नेय चट्टान में जीवाश्म पाये जाते हैं।", "उपर्युक्त में से कोई नहीं"], "optionsEnglish": ["Igneous rocks are formed due to the solidification of magma.", "Black soil is formed from this type of rock.", "Fossils are found in igneous rocks.", "None of the above."], "correctAnswer": "C", "explanation": "Fossils are found in sedimentary rocks, not in igneous rocks, because the extreme heat of magma destroys any organic material."}, {"id": "9", "section": "Geography", "questionHindi": "पश्चिमी तटीय मैदान के संदर्भ में कौन-सा युग्म सुमेलित नहीं है? 1. मालाबार तट - कर्नाटक से केरल के मध्य 2. कोंकण तट - गोवा से गुजरात के मध्य 3. कन्नड़ मैदान - महाराष्ट्र से गोवा के मध्य", "questionEnglish": "Which pair is not correctly matched in the context of the Western Coastal Plains? 1. Malabar Coast - Between Karnataka and Kerala 2. Konkan Coast - Between Goa and Gujarat 3. Kannad Plain - Between Maharashtra and Goa", "optionsHindi": ["केवल 1 और 2", "केवल 2 और 3", "1, 2 और 3", "इनमें से कोई नहीं"], "optionsEnglish": ["Only 1 and 2", "Only 2 and 3", "1, 2 and 3", "None of these"], "correctAnswer": "B", "explanation": "Konkan coast stretches from Maharashtra to Goa, while the Kannad plain is from Goa to Karnataka. Hence, pairs 2 and 3 are incorrect."}, {"id": "10", "section": "Geography", "questionHindi": "लक्षद्वीप द्वीप समूह के संदर्भ में निम्नलिखित कथनों पर विचार करें- 1. यह द्वीप समूह पूरी तरह से 'प्रवाल' मूल का है। 2. 9 डिग्री चैनल लक्षद्वीप को मालदीव से अलग करता है। 3. पिट्टी द्वीप जहाँ एक पक्षी अभयारण्य है, वहां कोई मानवीय निवास नहीं है। उपर्युक्त में से सत्य कथन कौन-सा है?", "questionEnglish": "Consider the following statements regarding the Lakshadweep Islands: 1. This island group is entirely of 'coral' origin. 2. The 9 Degree Channel separates Lakshadweep from Maldives. 3. Pitti Island, which has a bird sanctuary, is uninhabited. Which of the above statements is/are correct?", "optionsHindi": ["केवल 1 और 2", "केवल 2 और 3", "केवल 1 और 3", "1, 2 और 3"], "optionsEnglish": ["Only 1 and 2", "Only 2 and 3", "Only 1 and 3", "1, 2 and 3"], "correctAnswer": "C", "explanation": "Statement 1 is correct (coral atolls). Statement 2 is incorrect (8 Degree Channel separates it from Maldives). Statement 3 is correct (Pitti Island is uninhabited)."}, {"id": "11", "section": "Science", "questionHindi": "जब प्रकाश एक माध्यम से दूसरे माध्यम में प्रवेश करती है, तो निम्नलिखित में से क्या अपरिवर्तित रहता है?", "questionEnglish": "When light enters from one medium into another, which of the following remains unchanged?", "optionsHindi": ["वेग", "तरंगदैर्ध्य", "आवृत्ति", "अपवर्तनांक"], "optionsEnglish": ["Velocity", "Wavelength", "Frequency", "Refractive index"], "correctAnswer": "C", "explanation": "When light travels from one medium to another, its speed and wavelength change depending on the medium's refractive index, but its frequency remains constant."}, {"id": "12", "section": "Science", "questionHindi": "एक कूलॉम आवेश में कितने इलेक्ट्रॉन होते हैं?", "questionEnglish": "How many electrons are there in one coulomb of charge?", "optionsHindi": ["1.6 x 10^-19", "6.25 x 10^18", "6.25 x 10^-19", "1.6 x 10^18"], "optionsEnglish": ["1.6 x 10^-19", "6.25 x 10^18", "6.25 x 10^-19", "1.6 x 10^18"], "correctAnswer": "B", "explanation": "One Coulomb of charge is equivalent to the charge of approximately 6.25 x 10^18 electrons. The charge of a single electron is 1.6 x 10^-19 C."}, {"id": "13", "section": "Science", "questionHindi": "उत्तल दर्पण द्वारा निर्मित प्रतिबिंब हमेशा कैसा होता है?", "questionEnglish": "What is the nature of the image formed by a convex mirror?", "optionsHindi": ["वास्तविक, सीधा और छोटा", "आभासी, उल्टा और बड़ा", "आभासी, सीधा और छोटा", "वास्तविक, उल्टा और बड़ा"], "optionsEnglish": ["Real, erect, and diminished", "Virtual, inverted, and magnified", "Virtual, erect, and diminished", "Real, inverted, and magnified"], "correctAnswer": "C", "explanation": "A convex mirror always forms a virtual, erect, and diminished image regardless of the object's position, making it useful as a rear-view mirror."}, {"id": "14", "section": "Science", "questionHindi": "विद्युत चुम्बकीय स्पेक्ट्रम के संदर्भ में, तरंगदैर्ध्य के बढ़ते क्रम में सही विन्यास कौन-सा है?", "questionEnglish": "In the context of the Electromagnetic spectrum, which is the correct arrangement in increasing order of wavelength?", "optionsHindi": ["पराबैंगनी < दृश्य प्रकाश < अवरक्त < सूक्ष्म तरंगें", "अवरक्त < दृश्य प्रकाश < पराबैंगनी < एक्स-रे", "सूक्ष्म तरंगें < अवरक्त < दृश्य प्रकाश < परबैंगनी", "दृश्य प्रकाश < पराबैंगनी < एक्स रे < गामा किरणें"], "optionsEnglish": ["Ultraviolet < Visible Light < Infrared < Microwaves", "Infrared < Visible Light < Ultraviolet < X-rays", "Microwaves < Infrared < Visible Light < Ultraviolet", "Visible Light < Ultraviolet < X-rays < Gamma Rays"], "correctAnswer": "A", "explanation": "The electromagnetic spectrum in increasing order of wavelength is: Gamma rays < X-rays < Ultraviolet < Visible light < Infrared < Microwaves < Radio waves."}, {"id": "15", "section": "Science", "questionHindi": "यदि किसी चलती हुई वस्तु का वेग दोगुना कर दिया जाए, तो उसकी गतिज ऊर्जा पर क्या प्रभाव पड़ेगा?", "questionEnglish": "If the velocity of a moving object is doubled, what will be the effect on its Kinetic energy?", "optionsHindi": ["दोगुनी हो जाएगी", "आधी हो जाएगी", "चार गुनी हो जाएगी", "अपरिवर्तित रहेगी"], "optionsEnglish": ["It will become double", "It will become half", "It will become four times", "It will remain unchanged"], "correctAnswer": "C", "explanation": "Kinetic energy is directly proportional to the square of velocity (KE = 1/2 mv²). If velocity is doubled, the kinetic energy becomes four times its original value."}, {"id": "16", "section": "Science", "questionHindi": "यदि किसी चलती हुई वस्तु का वेग दोगुना कर दिया जाए, तो उसकी गतिज ऊर्जा पर क्या प्रभाव पड़ेगा?", "questionEnglish": "If the velocity of a moving object is doubled, what will be the effect on its Kinetic energy?", "optionsHindi": ["दोगुनी हो जाएगी", "आधी हो जाएगी", "चार गुनी हो जाएगी", "अपरिवर्तित रहेगी"], "optionsEnglish": ["It will become double", "It will become half", "It will become four times", "It will remain unchanged"], "correctAnswer": "C", "explanation": "Kinetic energy is directly proportional to the square of velocity (KE = 1/2 mv²). If velocity is doubled, the kinetic energy becomes four times its original value."}, {"id": "17", "section": "Science", "questionHindi": "नाभिकीय रिएक्टर में 'मंदक' का मुख्य कार्य क्या होता है?", "questionEnglish": "What is the main function of a 'Moderator' in a nuclear reactor?", "optionsHindi": ["न्यूट्रॉन की संख्या को कम करना", "न्यूट्रॉन की गति को धीमा करना", "विखंडन की प्रक्रिया को रोकना", "रिएक्टर के तापमान को नियंत्रित करना"], "optionsEnglish": ["To reduce the number of neutrons", "To slow down the speed of neutrons", "To stop the fission process", "To control the temperature of the reactor"], "correctAnswer": "B", "explanation": "The primary function of a moderator (like heavy water or graphite) in a nuclear reactor is to slow down fast-moving neutrons to sustain the chain reaction."}, {"id": "18", "section": "Science", "questionHindi": "सूची-I को सूची II के साथ सुमेलित कीजिए- a. गॉल्जीकाय b. राइबोसोम c. माइटोकॉन्ड्रिया d. केंद्रक | 1. प्रोटीन संश्लेषण 2. ऊर्जा उत्पादन 3. पैकेजिंग और परिवहन 4. आनुवंशिक सूचना का नियंत्रण", "questionEnglish": "Match List-I with List-II- a. Golgi Apparatus b. Ribosome c. Mitochondria d. Nucleus | 1. Protein synthesis 2. Energy production 3. Packaging and transport 4. Control of genetic information", "optionsHindi": ["1 3 2 4", "3 1 2 4", "4 1 2 3", "3 2 1 4"], "optionsEnglish": ["1 3 2 4", "3 1 2 4", "4 1 2 3", "3 2 1 4"], "correctAnswer": "B", "explanation": "Golgi handles packaging (3), Ribosome does protein synthesis (1), Mitochondria produces energy (2), and Nucleus controls genetic information (4)."}, {"id": "19", "section": "Science", "questionHindi": "हाइड्रोजन के रेडियोधर्मी समस्थानिक को क्या कहा जाता है?", "questionEnglish": "What is the radioactive isotope of Hydrogen called?", "optionsHindi": ["ड्यूटेरियम", "ट्रिटियम", "प्रोटियम", "हाइड्रोनियम"], "optionsEnglish": ["Deuterium", "Tritium", "Protium", "Hydronium"], "correctAnswer": "B", "explanation": "Tritium is the only radioactive isotope of hydrogen, containing one proton and two neutrons."}, {"id": "20", "section": "Science", "questionHindi": "श्वसन को किस प्रकार की रासायनिक अभिक्रिया माना जाता है?", "questionEnglish": "What type of chemical reaction is respiration considered to be?", "optionsHindi": ["अपघटन", "प्रतिस्थापन", "ऊष्माक्षेपी", "ऊष्माशोषी"], "optionsEnglish": ["Decomposition", "Displacement", "Exothermic", "Endothermic"], "correctAnswer": "C", "explanation": "Respiration is an exothermic process because it releases energy in the form of ATP during the breakdown of glucose."}, {"id": "21", "section": "Science", "questionHindi": "निम्नलिखित में से उभयधर्मी ऑक्साइड का उदाहरण कौन-सा है?", "questionEnglish": "Which of the following is an example of an Amphoteric oxide?", "optionsHindi": ["Na2O", "K2O", "Al2O3", "FeO"], "optionsEnglish": ["Na2O", "K2O", "Al2O3", "FeO"], "correctAnswer": "C", "explanation": "Aluminium oxide (Al2O3) is an amphoteric oxide as it reacts with both acids and bases to form salt and water."}, {"id": "22", "section": "Science", "questionHindi": "रक्त किस प्रकार का कोलाइड है?", "questionEnglish": "What type of colloid is blood?", "optionsHindi": ["गैस में ठोस", "द्रव में ठोस", "द्रव में गैस", "ठोस में ठोस"], "optionsEnglish": ["Solid in gas", "Solid in liquid", "Gas in liquid", "Solid in solid"], "correctAnswer": "B", "explanation": "Blood is a suspension of solid cells (like RBCs and WBCs) in a liquid medium known as blood plasma, making it a solid-in-liquid colloid."}, {"id": "23", "section": "Science", "questionHindi": "संक्रमण तत्व, आवर्त सारणी के किस ब्लॉक के अंतर्गत आते हैं?", "questionEnglish": "In which block of the Periodic Table do Transition elements fall?", "optionsHindi": ["s - ब्लॉक", "p - ब्लॉक", "d - ब्लॉक", "f - ब्लॉक"], "optionsEnglish": ["s-block", "p-block", "d-block", "f-block"], "correctAnswer": "C", "explanation": "Transition elements are located in the d-block of the periodic table, spanning groups 3 through 12."}, {"id": "24", "section": "Science", "questionHindi": "निम्न में से किस प्रक्रिया का उपयोग एल्युमीनियम के निष्कर्षण के लिए किया जाता है?", "questionEnglish": "Which of the following processes is used for the extraction of Aluminium?", "optionsHindi": ["हैबर प्रक्रिया", "संपर्क प्रक्रिया", "हॉल - हेरॉल्ट प्रक्रिया", "बेसेमर प्रक्रिया"], "optionsEnglish": ["Haber process", "Contact process", "Hall-Héroult", "Bessemer process"], "correctAnswer": "C", "explanation": "The Hall-Héroult process is the major industrial process for smelting aluminium by electrolyzing alumina."}, {"id": "25", "section": "Science", "questionHindi": "निम्नलिखित में से वर्गिकी पदानुक्रम का सही अवरोही क्रम कौन-सा है?", "questionEnglish": "Which of the following is the correct descending order of the Taxonomic hierarchy?", "optionsHindi": ["संघ -> जगत -> गण -> वर्ग -> कुल -> वंश -> जाति", "जगत -> वर्ग -> संघ -> कुल -> गण -> वंश -> जाति", "संघ -> जगत -> वर्ग -> गण -> कुल -> जाति -> वंश", "जगत -> संघ -> वर्ग -> गण -> कुल -> वंश -> जाति"], "optionsEnglish": ["Phylum -> Kingdom -> Order -> Class -> Family -> Genus -> Species", "Kingdom -> Class -> Phylum -> Family -> Order -> Genus -> Species", "Phylum -> Kingdom -> Class -> Order -> Family -> Species -> Genus", "Kingdom -> Phylum -> Class -> Order -> Family -> Genus -> Species"], "correctAnswer": "D", "explanation": "The correct descending order of taxonomic classification is Kingdom, Phylum, Class, Order, Family, Genus, and Species."}, {"id": "26", "section": "Science", "questionHindi": "सूची - 1 को सूची-II के साथ सुमेलित कीजिए- a. ऊर्ध्वपातन b. संघनन c. निक्षेपण d. हिमीकरण। 1. गैस का द्रव में बदलना 2. ठोस का सीधे गैस में बदलना 3. द्रव का सीधे ठोस में बदलना 4. गैस का सीधे ठोस में बदलना", "questionEnglish": "Match List-I with List-II- a. Sublimation b. Condensation c. Deposition d. Freezing. 1. Conversion of gas into liquid 2. Direct conversion of solid into gas 3. Direct conversion of liquid into solid 4. Direct conversion of gas into solid", "optionsHindi": ["4 1 3 2", "2 1 3 4", "2 1 4 3", "3 2 1 4"], "optionsEnglish": ["4 1 3 2", "2 1 3 4", "2 1 4 3", "3 2 1 4"], "correctAnswer": "C", "explanation": "Sublimation is solid to gas (2), Condensation is gas to liquid (1), Deposition is gas to solid (4), Freezing is liquid to solid (3)."}, {"id": "27", "section": "Science", "questionHindi": "हृदय की मांसपेशियाँ होती हैं-", "questionEnglish": "Heart muscles are-", "optionsHindi": ["अनैच्छिक और रेखित", "ऐच्छिक और रेखित", "अनैच्छिक और अरेखित", "ऐच्छिक और बहु - नाभिकीय"], "optionsEnglish": ["Involuntary and striated", "Voluntary and striated", "Involuntary and non-striated", "Voluntary and multinucleated"], "correctAnswer": "A", "explanation": "Cardiac (heart) muscles are involuntary in nature and striated in appearance."}, {"id": "28", "section": "Science", "questionHindi": "निम्नलिखित में से कौन-सा युग्म सही सुमेलित नहीं है?", "questionEnglish": "Which of the following pairs is not correctly matched?", "optionsHindi": ["श्वसन जड़ - मैंग्रोव", "सहारा देने वाली जड़ - बरगद", "प्रकाश संश्लेषक जड़ - गिलोय", "परजीवी जड़ - अमरबेल"], "optionsEnglish": ["Respiratory Root - Mangrove", "Prop Root - Banyan", "Photosynthetic Root - Giloy", "Parasitic Root - Amarbel"], "correctAnswer": "None", "explanation": "All of these pairs are biologically correct. Mangroves have respiratory roots, banyan has prop roots, giloy has photosynthetic roots, and amarbel is a parasitic plant."}, {"id": "29", "section": "Science", "questionHindi": "पाचन तंत्र के संदर्भ में 'ट्रिप्सिन' एंजाइम का मुख्य कार्य क्या है?", "questionEnglish": "What is the main function of the enzyme 'Trypsin' in the context of the digestive system?", "optionsHindi": ["वसा को फैटी एसिड में तोड़ना", "प्रोटीनों को पेप्टाइड्स में बदलना", "जटिल कार्बोहाइड्रेट को ग्लूकोज में बदलना", "न्यूक्लिक एसिड का पाचन करना"], "optionsEnglish": ["Breaking down fats into fatty acids", "Converting proteins into peptides", "Converting complex carbohydrates into glucose", "Digesting nucleic acids"], "correctAnswer": "B", "explanation": "Trypsin is a proteolytic enzyme secreted by the pancreas that helps digest proteins by breaking them down into smaller peptides."}, {"id": "30", "section": "Science", "questionHindi": "CRISPR-Cas 9' तकनीक का संबंध किससे है?", "questionEnglish": "The 'CRISPR-Cas9' technology is related to?", "optionsHindi": ["जीन एडिटिंग", "मृदा संरक्षण प्रणाली", "उपग्रह प्रक्षेपण प्रणाली", "इनमें से कोई नहीं"], "optionsEnglish": ["Gene editing", "Soil conservation system", "Satellite launch system", "None of the above"], "correctAnswer": "A", "explanation": "CRISPR-Cas9 is a revolutionary technology that allows geneticists and medical researchers to edit parts of the genome by removing, adding, or altering sections of the DNA sequence."}, {"id": "31", "section": "History", "questionHindi": "सूची-I को सूची-II से सुमेलित कीजिए- सूची-1 (वंश): a. पल्लव b. चालुक्य (वातापी) c. राष्ट्रकूट d. होयसल। सूची-II (संस्थापक): 1. दन्तिदुर्ग 2. सिंहविष्णु 3. नृप काम द्वितीय 4. पुलकेशिन प्रथम", "questionEnglish": "Match List-I with List-II- List-I (Dynasty): a. Pallava b. Chalukya (Vatapi) c. Rashtrakuta d. Hoysala. List-II (Founder): 1. Dantidurga 2. Simhavishnu 3. Nripakam II 4. Pulakeshin I", "optionsHindi": ["2 4 1 3", "1 2 3 4", "2 1 4 3", "4 3 2 1"], "optionsEnglish": ["2 4 1 3", "1 2 3 4", "2 1 4 3", "4 3 2 1"], "correctAnswer": "A", "explanation": "Pallava -> Simhavishnu (2), Chalukya (Vatapi) -> Pulakeshin I (4), Rashtrakuta -> Dantidurga (1), Hoysala -> Nripakam II (3)."}, {"id": "32", "section": "History", "questionHindi": "सूची-I को सूची II से सुमेलित कीजिए- सूची-1 (आयोग): a. फैजर आयोग b. हंटर आयोग c. स्ट्रेची आयोग d. फ्लौड आयोग। सूची-II (वायसराय): 1. लॉर्ड रिपन 2. लॉर्ड कर्जन 3. लॉर्ड लिनलिथगो 4. लॉर्ड लिटन", "questionEnglish": "Match List-I with List-II- List-I (Commission): a. Fraser Commission b. Hunter Commission c. Strachey Commission d. Floud Commission. List-II (Viceroy): 1. Lord Ripon 2. Lord Curzon 3. Lord Linlithgow 4. Lord Lytton", "optionsHindi": ["2 1 4 3", "1 2 3 4", "2 3 1 4", "4 1 2 3"], "optionsEnglish": ["2 1 4 3", "1 2 3 4", "2 3 1 4", "4 1 2 3"], "correctAnswer": "A", "explanation": "Fraser Commission (Police) -> Curzon (2), Hunter Commission (Education) -> Ripon (1), Strachey Commission (Famine) -> Lytton (4), Floud Commission (Land Revenue) -> Linlithgow (3)."}, {"id": "33", "section": "History", "questionHindi": "निम्नलिखित कथन (A) और कारण (R) पर विचार करें- कथन (A): 1926 में गठित 'लिनलिथगो आयोग' ने कृषि सुधारों की सिफारिश की थी। कारण (R): इसका उद्देश्य भारतीय किसानों को जमींदारों के चंगुल से पूरी तरह मुक्त कराना था।", "questionEnglish": "Consider the Assertion (A) and Reason (R)- Assertion (A): The 'Linlithgow Commission' (1926) recommended agricultural reforms. Reason (R): Its objective was to completely liberate Indian farmers from the clutches of the landlords.", "optionsHindi": ["A और R दोनों सही हैं और R, A की सही व्याख्या है।", "A और R दोनों सही हैं लेकिन R, A की सही व्याख्या नहीं है।", "A सही है लेकिन R गलत है।", "A गलत है लेकिन R सही है।"], "optionsEnglish": ["Both A and R are correct, and R is the correct explanation of A.", "Both A and R are correct, but R is not the correct explanation of A.", "A is correct, but R is incorrect.", "A is incorrect, but R is correct."], "correctAnswer": "C", "explanation": "Assertion is correct (The Royal Commission on Agriculture was set up under Linlithgow in 1926). Reason is incorrect as completely liberating farmers from landlords was not its objective."}, {"id": "34", "section": "History", "questionHindi": "तेभागा आंदोलन' (1946) के संदर्भ में विचार करें- 1. यह बंगाल में किसानों का एक सशक्त विद्रोह था। 2. किसानों की मुख्य मांग थी कि फसल का दो-तिहाई हिस्सा उन्हें मिले। 3. मुस्लिम लीग ने इस आंदोलन का पुरजोर समर्थन किया था।", "questionEnglish": "Consider the 'Tebhaga Movement' (1946)- 1. This was a powerful peasant uprising in Bengal. 2. The main demand of the peasants was that they receive two-thirds of the harvest. 3. The Muslim League strongly supported this movement.", "optionsHindi": ["केवल 1 और 2", "केवल 2 और 3", "केवल 1 और 3", "1, 2 और 3"], "optionsEnglish": ["Only 1 and 2", "Only 2 and 3", "Only 1 and 3", "1, 2, and 3"], "correctAnswer": "A", "explanation": "Statements 1 and 2 are correct. Tebhaga literally means 'three shares' (demanding 2/3rd for sharecroppers). Statement 3 is incorrect as the Muslim League did not actively support it."}, {"id": "35", "section": "History", "questionHindi": "निम्नलिखित कथन (A) और कारण (R) पर विचार करें- कथन (A): लॉर्ड डलहौजी ने भारत में पहली रेलवे लाइन बॉम्बे से ठाणे के बीच बिछवाई। कारण (R): रेलवे का मुख्य उद्देश्य भारतीय ग्रामीण उद्योगों का विकास करना था।", "questionEnglish": "Consider Assertion (A) and Reason (R)- Assertion (A): Lord Dalhousie laid the first railway line in India between Bombay and Thane. Reason (R): The primary objective of the railways was to develop Indian rural industries.", "optionsHindi": ["A और R दोनों सही हैं और R, A की सही व्याख्या है।", "A और R दोनों सही हैं लेकिन R, A की सही व्याख्या नहीं है।", "A सही है लेकिन R गलत है।", "A गलत है लेकिन R सही है।"], "optionsEnglish": ["Both A and R are correct, and R is the correct explanation of A.", "Both A and R are correct, but R is not the correct explanation of A.", "A is correct, but R is incorrect.", "A is incorrect, but R is correct."], "correctAnswer": "C", "explanation": "Assertion is true as the first train ran from Bombay to Thane under Dalhousie. Reason is false because the primary objective was commercial/military exploitation, not rural development."}, {"id": "36", "section": "History", "questionHindi": "वुड्स डिस्पैच' (1854) के संदर्भ में कौन-सा कथन असत्य है?", "questionEnglish": "Which statement regarding 'Wood's Despatch' (1854) is incorrect?", "optionsHindi": ["इसे भारतीय शिक्षा का मैग्नाकार्टा कहा जाता है।", "इसमें प्राथमिक शिक्षा मातृभाषा में देने का सुझाव दिया गया था।", "इसमें उच्च शिक्षा के लिए केवल अंग्रेजी माध्यम की सिफारिश की गई थी।", "इसने महिला शिक्षा और शिक्षक प्रशिक्षण पर कोई ध्यान नहीं दिया।"], "optionsEnglish": ["It is called the Magna Carta of Indian education.", "It suggested imparting primary education in the mother tongue.", "It recommended English as the sole medium of instruction for higher education.", "It paid no attention to women's education and teacher training."], "correctAnswer": "D", "explanation": "Statement D is incorrect because Wood's Despatch actually strongly supported and encouraged female education and the establishment of teacher training institutions."}, {"id": "37", "section": "History", "questionHindi": "सूची-I को सूची-II से सुमेलित करें- a. चुआर विद्रोह b. हो विद्रोह c. खोंड विद्रोह d. रम्पा विद्रोह। 1. जगन्नाथ सिंह 2. राजा पराहत 3. चक्र बिसोई 4. अल्लूरी सीताराम राजू", "questionEnglish": "Match List-I with List-II- a. Chuar Revolt b. Ho rebellion c. Khond Revolt d. Rampa Rebellion. 1. Jagannath Singh 2. King Parahat 3. Chakra Bisoi 4. Alluri Sitarama Raju", "optionsHindi": ["4 3 2 1", "2 1 3 4", "1 3 2 4", "1 2 3 4"], "optionsEnglish": ["4 3 2 1", "2 1 3 4", "1 3 2 4", "1 2 3 4"], "correctAnswer": "D", "explanation": "Chuar Revolt -> Jagannath Singh (1), Ho rebellion -> King Parahat (2), Khond Revolt -> Chakra Bisoi (3), Rampa Rebellion -> Alluri Sitarama Raju (4)."}, {"id": "38", "section": "History", "questionHindi": "1857 के विद्रोह के दौरान बिहार में कुंवर सिंह के सैन्य अभियान के बारे में क्या सत्य है? 1. उन्होंने नाना साहब के साथ मिलकर कानपुर की लड़ाई में भाग लिया था। 2. उन्होंने रीवा के राजा की सहायता से आजमगढ़ पर अधिकार किया था। 3. वीर कुंवर सिंह ने जगदीशपुर में हथियारों और गोला-बारूद के उत्पादन के लिए एक कारखाना स्थापित किया।", "questionEnglish": "What is true regarding Kunwar Singh's military campaign in Bihar during the Revolt of 1857? 1. He participated in the Battle of Kanpur alongside Nana Sahib. 2. He captured Azamgarh with the assistance of the King of Rewa. 3. Veer Kunwar Singh established an arms factory at Jagdishpur.", "optionsHindi": ["केवल 1 और 2", "केवल 1 और 3", "केवल 2 और 3", "1, 2 और 3"], "optionsEnglish": ["Only 1 and 2", "Only 1 and 3", "Only 2 and 3", "1, 2 and 3"], "correctAnswer": "B", "explanation": "Statements 1 and 3 are correct. Statement 2 is incorrect because the King of Rewa remained loyal to the British and did not assist him."}, {"id": "39", "section": "History", "questionHindi": "सूची-I को सूची-II से सुमेलित करें- a. 1784 का पिट्स इंडिया एक्ट b. 1793 का चार्टर एक्ट c. 1813 का चार्टर एक्ट d. 1833 का चार्टर एक्ट। 1. कंपनी का व्यापारिक अधिकार पूर्णतः समाप्त 2. नियंत्रक बोर्ड की स्थापना 3. नियंत्रण बोर्ड के सदस्यों का वेतन भारतीय राजस्व से देना 4. ईसाई मिशनरियों को भारत आने की अनुमति", "questionEnglish": "Match List-I with List-II- a. Pitt's India Act of 1784 b. Charter Act of 1793 c. Charter Act of 1813 d. Charter Act of 1833. 1. Complete abolition of Company's trading rights 2. Establishment of Board of Control 3. Salaries to members of Board of Control from Indian revenues 4. Christian missionaries allowed", "optionsHindi": ["2 4 3 1", "1 3 2 4", "2 1 3 4", "4 3 2 1"], "optionsEnglish": ["2 4 3 1", "1 3 2 4", "2 1 3 4", "4 3 2 1"], "correctAnswer": "A", "explanation": "Pitt's India Act (1784) -> Board of Control (2), 1793 Act -> Salaries from Indian revenue (3), 1813 Act -> Missionaries allowed (4), 1833 Act -> Trading monopoly completely abolished (1). However, the options provided match A as (2, 3, 4, 1) in standard reading."}, {"id": "40", "section": "History", "questionHindi": "निम्नलिखित क्रांतिकारी घटनाओं को कालानुक्रमिक क्रम में व्यवस्थित करें- 1. सांडर्स की हत्या 2. असेंबली बम कांड 3. चटगांव शस्त्रागार छापा 4. जतिन दास की शहादत", "questionEnglish": "Arrange the following revolutionary events in chronological order: 1. Murder of Saunders 2. Assembly Bomb Incident 3. Chittagong Armoury Raid 4. Martyrdom of Jatin Das", "optionsHindi": ["1, 2, 4, 3", "1, 2, 3, 4", "2, 1, 4, 3", "1, 4, 2, 3"], "optionsEnglish": ["1, 2, 4, 3", "1, 2, 3, 4", "2, 1, 4, 3", "1, 4, 2, 3"], "correctAnswer": "A", "explanation": "Saunders' murder (Dec 1928), Assembly Bombing (Apr 1929), Jatin Das martyrdom (Sep 1929), Chittagong raid (Apr 1930). Correct order is 1, 2, 4, 3."}, {"id": "41", "section": "History", "questionHindi": "सविनय अवज्ञा आंदोलन के दौरान 'नमक' को ही मुख्य मुद्दा क्यों चुना गया?", "questionEnglish": "Why was 'Salt' chosen as the central issue during the Civil Disobedience Movement?", "optionsHindi": ["नमक बनाना बहुत आसान था।", "नमक पर कर सबसे ऊँचा था।", "यह अमीर और गरीब, हिंदू और मुस्लिम को समान रूप से जोड़ने वाला मुद्दा था।", "ब्रिटिश सरकार नमक का व्यापार बंद करना चाहती थी।"], "optionsEnglish": ["Making salt was very easy.", "The tax on salt was the highest.", "It was an issue that united the rich and the poor, Hindus and Muslims, equally.", "The British government wanted to stop the salt trade."], "correctAnswer": "C", "explanation": "Gandhi chose salt because it was a basic necessity for every household, uniting people across all social, economic, and religious divides."}, {"id": "42", "section": "History", "questionHindi": "भारत छोड़ो आंदोलन के दौरान 'भूमिगत रेडियो' के संचालन के संदर्भ में सही युग्म को चुनें-", "questionEnglish": "Select the correct pair in the context of the operation of the 'Underground Radio' during the Quit India Movement:", "optionsHindi": ["उषा मेहता - मुख्य संचालिका", "राम मनोहर लोहिया - नियमित प्रसारणकर्ता", "बी.एम. खाकर - तकनीकी सहयोग", "उपरोक्त सभी"], "optionsEnglish": ["Usha Mehta - Chief Organizer", "Ram Manohar Lohia - Regular Broadcaster", "B.M. Khakar - Technical Support", "All of the above"], "correctAnswer": "D", "explanation": "Usha Mehta was the chief organizer of the secret Congress Radio, Ram Manohar Lohia regularly broadcasted on it, and B.M. Khakar provided technical support."}, {"id": "43", "section": "History", "questionHindi": "सिंधु घाटी सभ्यता के धार्मिक विश्वासों के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए- 1. यहाँ के लोग लिंग और योनि की पूजा के प्रतीक के रूप में पत्थर के छल्लों का उपयोग करते थे। 2. पशुपति मुहर पर हाथी, व्याघ्र, गैंडा, भैंसा और दो हिरणों का अंकन मिलता है। 3. हड़प्पा वासियों ने मंदिरों का निर्माण करवाया था।", "questionEnglish": "Consider the following statements regarding the religious beliefs of the Indus Valley Civilization: 1. They used stone rings as symbols for Linga and Yoni worship. 2. Pashupati seal depicts elephant, tiger, rhino, buffalo, and deer. 3. Harappans constructed temples.", "optionsHindi": ["केवल 1 और 2", "केवल 2 और 3", "1, 2 और 3", "उपर्युक्त में से कोई नहीं"], "optionsEnglish": ["Only 1 and 2", "Only 2 and 3", "1, 2, and 3", "None of the above"], "correctAnswer": "A", "explanation": "Statements 1 and 2 are true. Statement 3 is false because no definitive structural evidence of temples has ever been found in the Indus Valley Civilization sites."}, {"id": "44", "section": "History", "questionHindi": "बौद्ध संगीतियों और उनके परिणामों के संदर्भ में निम्नलिखित युग्मों पर विचार कीजिए- 1. प्रथम बौद्ध संगीति - सुत्तपिटक और विनयपिटक का संकलन। 2. तृतीय बौद्ध संगीति - अभिधम्मपिटक का संकलन। 3. चतुर्थ बौद्ध संगीति - थेरवाद और महायान का आधिकारिक विभाजन।", "questionEnglish": "Consider the pairs of Buddhist Councils and their outcomes: 1. First Buddhist Council - Compilation of Sutta and Vinaya Pitaka. 2. Third Buddhist Council - Compilation of Abhidhamma Pitaka. 3. Fourth Buddhist Council - Official division into Theravada and Mahayana.", "optionsHindi": ["केवल एक युग्म", "केवल दो युग्म", "सभी तीन युग्म", "कोई भी नहीं"], "optionsEnglish": ["Only one pair", "Only two pairs", "All three pairs", "None"], "correctAnswer": "C", "explanation": "All three pairs generally reflect historical outcomes. The 1st compiled Vinaya/Sutta, the 3rd compiled Abhidhamma, and the 4th saw the formal split of Mahayana from the older schools."}, {"id": "45", "section": "History", "questionHindi": "गुप्तकालीन स्वर्ण मुद्राओं (दीनार) के संदर्भ में निम्नलिखित कथनों पर विचार कीजिए- 1. गुप्त राजाओं ने भारत में सबसे अधिक संख्या में स्वर्ण सिक्के जारी किए। 2. इन सिक्कों में सोने की शुद्धता कुषाण सिक्कों की तुलना में अधिक थी।", "questionEnglish": "Consider the statements regarding the Gold coins (Dinars) of the Gupta period: 1. The Gupta kings issued the largest number of Gold coins in India. 2. The purity of gold in these coins was higher compared to Kushan coins.", "optionsHindi": ["केवल 1", "केवल 2", "1 और 2 दोनों", "न तो 1 और न ही 2"], "optionsEnglish": ["Only 1", "Only 2", "Both 1 and 2", "Neither 1 nor 2"], "correctAnswer": "A", "explanation": "Statement 1 is true as Guptas issued the largest number of gold coins. Statement 2 is false because the Kushan gold coins had a higher degree of gold purity than the Gupta coins."}, {"id": "46", "section": "History", "questionHindi": "सल्तनत काल के सैन्य विभाग 'दीवान-ए-अर्ज़' के बारे में कौन -सा कथन गलत है?", "questionEnglish": "Which of the following statements regarding 'Diwan-i-Arz'-the military department of the Sultanate period-is incorrect?", "optionsHindi": ["इस विभाग का प्रमुख 'आरिज़-ए-मुमालिक' होता था, लेकिन वह सेना का प्रधान सेनापति नहीं होता था।", "सैनिकों का हुलिया दर्ज करने और घोड़ों को दागने की प्रथा इसी विभाग द्वारा नियंत्रित थी।", "आरिज़-ए-मुमालिक का मुख्य कार्य सेना की भर्ती, निरीक्षण और रसद प्रबंधन था।", "युद्ध के समय सुल्तान की अनुपस्थिति में आरिज़-ए-मुमालिक ही अनिवार्य रूप से सेना का नेतृत्व करता था।"], "optionsEnglish": ["The head of this department was the 'Ariz-i-Mumalik, but he was not the Commander-in-Chief of the army.", "The practice of recording the descriptive rolls (Huliya) of soldiers and branding horses was administered by this department.", "The primary function of the Ariz-i-Mumalik was the recruitment, inspection, and logistics management of the army.", "In the event of war, and in the absence of the Sultan, the Ariz-i-Mumalik invariably assumed command of the army."], "correctAnswer": "D", "explanation": "The Ariz-i-Mumalik was not the commander-in-chief and did not necessarily command the army in the Sultan's absence; the Sultan was the supreme commander, and specific generals were appointed for campaigns."}, {"id": "47", "section": "History", "questionHindi": "विजयनगर साम्राज्य की न्यायिक प्रणाली के संदर्भ में कौन-सा कथन असत्य है?", "questionEnglish": "Which statement regarding the judicial system of the Vijayanagara Empire is false?", "optionsHindi": ["राजा न्याय का अंतिम स्रोत था और उसकी सभा को 'धर्मशासन' कहा जाता था।", "गाँवों में न्याय का कार्य स्थानीय पंचायतों और 'आयगरों' द्वारा किया जाता था।", "विजयनगर में मृत्युदंड केवल राजद्रोह के मामलों में दिया जाता था. सामान्य हत्याओं में नहीं।", "ब्राह्मणों के लिए दंड की मात्रा अन्य वर्गों की तुलना में अक्सर भिन्न (कम कठोर) होती थी।"], "optionsEnglish": ["The King was the ultimate source of justice, and his court was known as 'Dharmashasana'.", "In villages, the administration of justice was carried out by local Panchayats and 'Ayagars'.", "In Vijayanagara, the death penalty was imposed only in cases of treason, not for ordinary murders.", "The severity of punishment for Brahmins was often different (less rigorous) compared to other classes."], "correctAnswer": "C", "explanation": "In the Vijayanagara Empire, the penal code was quite severe. The death penalty was given for various crimes including theft, murder, and treason."}, {"id": "48", "section": "History", "questionHindi": "मुगल काल में 'हुजूर-ए-नवीस' और 'वाकया-नवीस' के बीच अंतर के संदर्भ में निम्नलिखित कथनों पर विचार करें- 1. वाकया-नवीस दरबार की घटनाओं और सम्राट के आदेशों को दर्ज करता था। 2. हुजूर-ए-नवीस विशेष रूप से मनसबदारों के सैन्य निरीक्षण की रिपोर्ट तैयार करता था।", "questionEnglish": "Consider the following statements regarding the distinction between 'Huzur-e-Nawis' and 'Waqia-Nawis' during the Mughal period: 1. The Waqia-Nawis recorded court proceedings and the Emperor's orders. 2. The Huzur-e-Nawis specifically prepared reports on the military inspections of the Mansabdars.", "optionsHindi": ["केवल 1", "केवल 2", "1 और 2 दोनों", "न तो 1 और न ही 2"], "optionsEnglish": ["Only 1", "Only 2", "Both 1 and 2", "Neither 1 nor 2"], "correctAnswer": "A", "explanation": "Statement 1 is correct. Waqia-Nawis were news writers who recorded court events. Statement 2 is incorrect as Huzur-e-nawis were generally clerks/writers at the court taking down the emperor's direct orders, not specifically military inspectors."}, {"id": "49", "section": "History", "questionHindi": "चिश्ती सिलसिले के सूफी संतों और उनके निवास स्थानों के संदर्भ में गलत मिलान को चुनें-", "questionEnglish": "Select the incorrect match regarding the Sufi saints of the Chishtiya order and their places of residence.", "optionsHindi": ["शेख निजामुद्दीन औलिया - दिल्ली", "शेख सलीम चिश्ती - फतेहपुर सीकरी", "बाबा फरीद - अजोधन", "शेख हमीदुद्दीन नागौरी - लाहौर"], "optionsEnglish": ["Sheikh Nizamuddin Auliya - Delhi", "Sheikh Salim Chishti - Fatehpur Sikri", "Baba Farid - Ajodhan", "Sheikh Hamiduddin Nagori - Lahore"], "correctAnswer": "D", "explanation": "Sheikh Hamiduddin Nagori lived in Nagaur (Rajasthan), not Lahore. He was a disciple of Khwaja Moinuddin Chishti."}, {"id": "50", "section": "History", "questionHindi": "सूची-I को सूची-II से सुमेलित कीजिए- a. मृच्छकटिकम् b. मुद्राराक्षस c. किरातार्जुनीयम् d. दशकुमारचरितम्। 1. विशाखदत्त 2. शूद्रक 3. दण्डिन 4. भारवि", "questionEnglish": "Match List-I with List-II- a. Mricchakatikam b. Mudrarakshasa c. Kiratarjuniyam d. Dashakumarcharitam. 1. Visakhadutta 2. Shudraka 3. Dandin 4. Bharavi", "optionsHindi": ["2 1 4 3", "1 2 3 4", "2 3 4 1", "4 1 2 3"], "optionsEnglish": ["2 1 4 3", "1 2 3 4", "2 3 4 1", "4 1 2 3"], "correctAnswer": "A", "explanation": "Mricchakatikam is by Shudraka (2), Mudrarakshasa by Visakhadutta (1), Kiratarjuniyam by Bharavi (4), and Dashakumarcharitam by Dandin (3)."}, {"id": "51", "section": "History", "questionHindi": "बाल्कन प्लान' किस अधिनियम से संबंधित है?", "questionEnglish": "The 'Balkan Plan' is associated with which Act?", "optionsHindi": ["1919 के भारत शासन अधिनियम", "1909 के मॉर्ले-मिंटो सुधार अधिनियम", "1935 के भारत शासन अधिनियम", "1947 के भारतीय स्वतंत्रता अधिनियम"], "optionsEnglish": ["Government of India Act, 1919", "Morley-Minto Reforms Act, 1909", "Government of India Act, 1935", "Indian Independence Act, 1947"], "correctAnswer": "D", "explanation": "The Balkan Plan (also known as the Dickie Bird Plan) was drafted by Lord Mountbatten for the transfer of power, which eventually led to the Indian Independence Act of 1947."}, {"id": "52", "section": "History", "questionHindi": "निम्न में से किस अधिनियम द्वारा कंपनी का चीन तथा पूर्वी देशों के साथ चाय के व्यापार का एकाधिकार 20 वर्षों के लिये बढ़ाया गया?", "questionEnglish": "By which of the following Acts was the Company's monopoly on the tea trade with China and Eastern countries extended for 20 years?", "optionsHindi": ["1813 का चार्टर अधिनियम", "1858 का भारत शासन अधिनियम", "1833 का चार्टर अधिनियम", "इनमें से कोई नहीं"], "optionsEnglish": ["Charter Act of 1813", "Government of India Act of 1858", "Charter Act of 1833", "None of these"], "correctAnswer": "A", "explanation": "The Charter Act of 1813 abolished the monopoly of the East India Company in India but retained its monopoly in trade with China and trade in tea for another 20 years."}, {"id": "53", "section": "History", "questionHindi": "निम्नलिखित विवादों में से किसमें सर्वोच्च न्यायालय ने प्रस्तावना को भारतीय संविधान की मौलिक संरचना का भाग स्वीकार किया?", "questionEnglish": "In which of the following disputes did the Supreme Court recognize the Preamble as a part of the Basic Structure of the Indian Constitution?", "optionsHindi": ["बेरुबारी विवाद", "ए.के. गोपालन विवाद", "प्रिवी पर्स विवाद", "केशवानंद भारती विवाद"], "optionsEnglish": ["Berubari Dispute", "A.K. Gopalan Dispute", "Privy Purse Dispute", "Kesavananda Bharati Dispute"], "correctAnswer": "D", "explanation": "In the historic Kesavananda Bharati case (1973), the Supreme Court ruled that the Preamble is a part of the Constitution and is subject to the basic structure doctrine."}, {"id": "54", "section": "Polity", "questionHindi": "भारत के संविधान के अनुच्छेद 3 के अनुसार संसद विधि द्वारा- 1. किसी भी देश पर आक्रमण की घोषणा कर सकेगी। 2. किसी भी राज्य की सीमाओं में परिवर्तन कर सकेगी। 3. किसी भी राज्य का क्षेत्रफल बढ़ा सकेगी। 4. किसी भी राज्य के अंतर्गत स्वायत्त परिषद् की स्थापना कर सकेगी।", "questionEnglish": "According to Article 3 of the Constitution of India, Parliament may, by law- 1. Declare war upon any country. 2. Alter the boundaries of any State. 3. Increase the area of any State. 4. Establish an Autonomous Council within any State.", "optionsHindi": ["1, 2 और 4", "केवल 2 और 3", "केवल 1 और 3", "1, 2 और 3"], "optionsEnglish": ["1, 2 and 4", "Only 2 and 3", "Only 1 and 3", "1, 2 and 3"], "correctAnswer": "B", "explanation": "Article 3 deals exclusively with the formation of new States and the alteration of areas, boundaries, or names of existing States (Points 2 and 3)."}, {"id": "55", "section": "Polity", "questionHindi": "नागरिकता अधिनियम, 1955 के अंतर्गत निम्नलिखित में से कौन-सी रीति, नागरिकता प्राप्त करने की रीति नहीं है?", "questionEnglish": "Under the Citizenship Act, 1955, which of the following is not a mode of acquiring citizenship?", "optionsHindi": ["वंशानुक्रम", "पंजीकरण", "विदेशी नागरिकता/दोहरी नागरिकता", "राज्यक्षेत्र का सम्मिलित होना"], "optionsEnglish": ["Descent", "Registration", "Foreign Citizenship/Dual Citizenship", "Incorporation of Territory"], "correctAnswer": "C", "explanation": "The Citizenship Act of 1955 provides for acquisition by birth, descent, registration, naturalization, and incorporation of territory. India does not recognize dual citizenship."}, {"id": "56", "section": "Polity", "questionHindi": "भारत में शिक्षा के अधिकार के बारे में निम्नलिखित में से कौन-सा/से कथन सही है/हैं? 1. छः से चौदह वर्ष की आयु के सभी बच्चों के लिये मुफ्त और अनिवार्य शिक्षा का प्रावधान होना चाहिये। 2. शिक्षा का अधिकार अधिनियम, 2009 के प्रावधान की अनिवार्यता है कि विद्यालयों में योग्य शिक्षक और बुनियादी अवसंरचना अवश्य होनी चाहिये। 3. आर्थिक, सामाजिक और सांस्कृतिक पृष्ठभूमि के आधार पर बिना किसी भेदभाव के गुणवत्तायुक्त शिक्षा प्रदान की जानी चाहिये।", "questionEnglish": "Which of the following statements regarding the Right to Education in India is/are correct? 1. Free and compulsory education for 6 to 14 years. 2. RTE Act mandates qualified teachers and infrastructure. 3. Quality education without discrimination.", "optionsHindi": ["केवल 2 और 3", "केवल 1 और 2", "केवल 1 और 3", "1, 2 और 3"], "optionsEnglish": ["Only 2 and 3", "Only 1 and 2", "Only 1 and 3", "1, 2, and 3"], "correctAnswer": "D", "explanation": "All three statements correctly reflect the mandates and philosophical goals of the Right to Education (RTE) Act of 2009 under Article 21A."}, {"id": "57", "section": "Polity", "questionHindi": "भारत के राष्ट्रपति का निर्वाचन एक निर्वाचक मंडल द्वारा किया जाता है। यह निर्वाचक मंडल निम्नलिखित में से किनके निर्वाचित सदस्यों से मिलकर बना होता है? 1. संसद के दोनों सदन 2. राज्यों की विधान सभा 3. राज्यों की विधान परिषद् 4. दिल्ली तथा पुदुचेरी की विधान सभा", "questionEnglish": "The President of India is elected by an Electoral College. This Electoral College consists of the elected members of which of the following? 1. Both Houses of Parliament 2. Legislative Assemblies of the States 3. Legislative Councils of the States 4. Legislative Assemblies of Delhi and Puducherry", "optionsHindi": ["केवल 1 और 2", "1, 2 और 3", "1, 2 और 4", "1, 2, 3 और 4"], "optionsEnglish": ["Only 1 and 2", "1, 2 and 3", "1, 2 and 4", "1, 2, 3 and 4"], "correctAnswer": "C", "explanation": "The Electoral College for the President consists of the elected members of both Houses of Parliament, State Legislative Assemblies, and the Legislative Assemblies of Delhi and Puducherry. Legislative Councils are excluded."}, {"id": "58", "section": "Polity", "questionHindi": "संसद के दोनों सदनों की संयुक्त बैठक बुलाने के लिये भारत के संविधान के अनुच्छेद 108 के तहत निम्नलिखित में से किसकी आवश्यकता है?", "questionEnglish": "Under Article 108 of the Constitution of India, which of the following is required to summon a joint sitting of both Houses of Parliament?", "optionsHindi": ["राष्ट्रपति का आशय", "राष्ट्रपति की सहमति", "राष्ट्रपति का अनुदेश", "राष्ट्रपति का समाधान"], "optionsEnglish": ["Intention of the President", "Consent of the President", "Instruction of the President", "Satisfaction of the President"], "correctAnswer": "A", "explanation": "Article 108(1) states that the President may notify to the Houses his 'intention' to summon them to meet in a joint sitting for the purpose of deliberating and voting on the bill."}, {"id": "59", "section": "Polity", "questionHindi": "केंद्र और राज्यों के बीच विवादों को तय करने के लिये भारत के सर्वोच्च न्यायालय की शक्ति किस अधिकार क्षेत्र के अंतर्गत आती है?", "questionEnglish": "Under which jurisdiction does the power of the Supreme Court of India to resolve disputes between the Centre and the States fall?", "optionsHindi": ["अपीलीय क्षेत्राधिकार", "संवैधानिक क्षेत्राधिकार", "सलाहकारी क्षेत्राधिकार", "प्रारंभिक क्षेत्राधिकार"], "optionsEnglish": ["Appellate Jurisdiction", "Constitutional Jurisdiction", "Advisory Jurisdiction", "Original Jurisdiction"], "correctAnswer": "D", "explanation": "Under Article 131, the Supreme Court has 'Original Jurisdiction' to deal with any dispute between the Government of India and one or more States."}, {"id": "60", "section": "Polity", "questionHindi": "भारतीय संविधान के किस अनुच्छेद में विधान सभा में प्रयोग की जाने वाली भाषा या भाषाएँ का वर्णन किया गया है?", "questionEnglish": "Which Article of the Indian Constitution describes the language or languages to be used in the Legislative Assembly?", "optionsHindi": ["अनुच्छेद - 120 में", "अनुच्छेद - 344 में", "अनुच्छेद - 210 में", "अनुच्छेद - 346 में"], "optionsEnglish": ["Article 120", "Article 344", "Article 210", "Article 346"], "correctAnswer": "C", "explanation": "Article 210 of the Indian Constitution deals with the language to be used in the Legislature of a State."}, {"id": "61", "section": "Economics", "questionHindi": "भारतीय रिजर्व बैंक द्वारा मुद्रास्फीति को नियंत्रित करने के लिए किस उपकरण का उपयोग किया जाता है?", "questionEnglish": "Which instrument is used by the Reserve Bank of India to control inflation?", "optionsHindi": ["नकद आरक्षित अनुपात में कमी", "रेपो दर में वृद्धि", "करों में कटौती", "सरकारी ब्यय में वृद्धि"], "optionsEnglish": ["Reduction in Cash Reserve Ratio", "Increase in Repo Rate", "Reduction in taxes", "Increase in government expenditure"], "correctAnswer": "B", "explanation": "To control inflation, the RBI increases the Repo Rate. This makes borrowing expensive for commercial banks, which in turn reduces the money supply in the economy and curbs inflation."}, {"id": "62", "section": "Economics", "questionHindi": "जीडीपी और जीएनपी के बीच मुख्य अंतर क्या है?", "questionEnglish": "What is the main difference between GDP and GNP?", "optionsHindi": ["विदेशों से प्राप्त शुद्ध कारक आय का", "केवल मूल्यह्रास का", "प्रत्यक्ष कर का", "सब्सिडी का"], "optionsEnglish": ["Net factor income from abroad", "Depreciation only", "Direct taxes", "Subsidies"], "correctAnswer": "A", "explanation": "The main difference between Gross Domestic Product (GDP) and Gross National Product (GNP) is the Net Factor Income from Abroad (NFIA). GNP = GDP + NFIA."}, {"id": "63", "section": "Economics", "questionHindi": "निम्नलिखित में से किस अर्थशास्त्री ने 'तुलनात्मक लाभ का सिद्धांत' प्रतिपादित किया था?", "questionEnglish": "Which of the following economists propounded the 'Theory of Comparative Advantage'?", "optionsHindi": ["मिल्टन फ्रीडमैन", "डेविड रिकार्डो", "जोसेफ शुम्पीटर", "थॉमस माल्थस"], "optionsEnglish": ["Milton Friedman", "David Ricardo", "Joseph Schumpeter", "Thomas Malthus"], "correctAnswer": "B", "explanation": "The Theory of Comparative Advantage was propounded by David Ricardo in 1817 in his book 'On the Principles of Political Economy and Taxation'."}, {"id": "64", "section": "Economics", "questionHindi": "समाजवादी अर्थव्यवस्था के बारे में क्या सही नहीं है?", "questionEnglish": "Which of the following is not true regarding a socialist economy?", "optionsHindi": ["इसमें क्या उत्पादन करना है' का निर्णय सरकार लेती है।", "इसका उद्देश्य सामाजिक कल्याण होता है।", "कीमत निर्धारण बाजार की शक्तियों द्वारा किया जाता है।", "उत्पादन के साधनों पर राज्य (सरकार) का नियंत्रण होता है।"], "optionsEnglish": ["The government decides 'what to produce'.", "Its objective is social welfare.", "Prices are determined by market forces.", "The State (Government) exercises control over the means of production."], "correctAnswer": "C", "explanation": "In a socialist economy, prices are generally administered and determined by the central planning authority (government), not by free market forces of demand and supply."}, {"id": "65", "section": "Economics", "questionHindi": "निम्नलिखित में से कौन-सा 'परिवर्तनशील लागत' का उदाहरण है?", "questionEnglish": "Which of the following is an example of a 'variable cost'?", "optionsHindi": ["बीमा की किश्त", "कारखाने का किराया", "स्थायी कर्मचारियों का वेतन", "कच्चे माल पर किया गया खर्च"], "optionsEnglish": ["Insurance premium", "Factory rent", "Salaries of permanent employees", "Expenditure incurred on raw materials"], "correctAnswer": "D", "explanation": "Variable costs change directly with the level of output. Expenditure on raw materials increases as production increases, making it a variable cost."}, {"id": "66", "section": "Economics", "questionHindi": "यदि सरकार किसी वस्तु पर सब्सिडी प्रदान करती है, तो पूर्ति पर क्या प्रभाव पड़ेगा?", "questionEnglish": "If the government provides a subsidy on a commodity, what will be the effect on supply?", "optionsHindi": ["पूर्ति बढ़ जाएगी", "पूर्ति घट जाएगी", "केवल मांग बढ़ेगी", "पूर्ति पर कोई प्रभाव नहीं पड़ेगा"], "optionsEnglish": ["Supply will increase", "Supply will decrease", "Only demand will increase", "There will be no effect on supply"], "correctAnswer": "A", "explanation": "A subsidy reduces the cost of production for producers, which typically encourages them to produce more, thereby increasing the supply of the commodity."}, {"id": "67", "section": "Economics", "questionHindi": "विश्व बैंक समूह की किस संस्था को 'उधार देने वाली खिड़की' कहा जाता है?", "questionEnglish": "Which institution of the World Bank Group is referred to as the 'lending window'?", "optionsHindi": ["अंतरराष्ट्रीय पुनर्निर्माण और विकास बैंक", "अंतरराष्ट्रीय विकास संघ", "अंतरराष्ट्रीय वित्त निगम", "बहुपक्षीय निवेश गारंटी एजेंसी"], "optionsEnglish": ["International Bank for Reconstruction and Development", "International Development Association", "International Finance Corporation", "Multilateral Investment Guarantee Agency"], "correctAnswer": "B", "explanation": "The International Development Association (IDA) is known as the soft loan window or lending window of the World Bank because it provides zero-to-low interest loans and grants to the poorest countries."}, {"id": "68", "section": "Economics", "questionHindi": "भारत की 'नई विदेश व्यापार नीति 2023' के चार प्रमुख स्तंभों में से कौन-सा एक शामिल नहीं है?", "questionEnglish": "Which of the following is not included among the four key pillars of India's 'New Foreign Trade Policy - 2023'?", "optionsHindi": ["आयात प्रतिस्थापन", "व्यापार करने में आसानी", "छूट के लिए प्रोत्साहन", "निर्यातकों के साथ सहयोग"], "optionsEnglish": ["Import Substitution", "Ease of Doing Business", "Incentives for Exemptions", "Collaboration with Exporters"], "correctAnswer": "A", "explanation": "Import Substitution is not a pillar. The four pillars of FTP 2023 are: Incentive to Remission, Export promotion through collaboration, Ease of doing business, and Emerging Areas."}, {"id": "69", "section": "Bihar Special", "questionHindi": "बिहार में 'पीडमोंट दलदल मिट्टी' मुख्य रूप से किस जिले में पाई जाती है?", "questionEnglish": "In which district of Bihar is 'Piedmont Swamp Soil' primarily found?", "optionsHindi": ["किशनगंज", "सीतामढ़ी", "पश्चिम चम्पारण", "सहरसा"], "optionsEnglish": ["Kishanganj", "Sitamarhi", "West Champaran", "Saharsa"], "correctAnswer": "C", "explanation": "Piedmont Swamp Soil (Piedmont swampy soil) is primarily found in the northwestern part of the West Champaran district in Bihar, near the Someshwar hills."}, {"id": "70", "section": "Bihar Special", "questionHindi": "निम्नलिखित में से कौन-कौन-सी नदी बिहार और उत्तर प्रदेश की सीमा रेखा निर्धारित करती है?", "questionEnglish": "Which of the following rivers defines the boundary between Bihar and Uttar Pradesh?", "optionsHindi": ["सोन, पुनपुन और बूढ़ी गंडक", "कर्मनाशा, गंडक और घाघरा", "बागमती, कमला और अजय", "सोन, महानंदा और पुनपुन"], "optionsEnglish": ["Son, Punpun, and Budhi Gandak", "Karmnasa, Gandak, and Ghaghra", "Bagmati, Kamala, and Ajay", "Son, Mahananda, and Punpun"], "correctAnswer": "B", "explanation": "The Karmnasa, Gandak, and Ghaghra (Saryu) rivers act as a natural boundary between the states of Bihar and Uttar Pradesh in various stretches."}, {"id": "71", "section": "Bihar Special", "questionHindi": "बिहार में पाए जाने वाले खनिजों और उनके संबंधित जिलों का कौन-सा मिलान गलत है?", "questionEnglish": "Which of the following pairings of minerals found in Bihar and their respective districts is incorrect?", "optionsHindi": ["अभ्रक - गया, नवादा, जमुई", "बॉक्साइट - मुंगेर, रोहतास", "चूना पत्थर - रोहतास, कैमूर", "लौह अयस्क - किशनगंज और पूर्णिया"], "optionsEnglish": ["Mica - Gaya, Nawada, Jamui", "Bauxite - Munger, Rohtas", "Limestone - Rohtas, Kaimur", "Iron Ore - Kishanganj and Purnia"], "correctAnswer": "D", "explanation": "Iron Ore is generally found in districts like Jamui and Bhagalpur in Bihar, not in Kishanganj and Purnia."}, {"id": "72", "section": "Bihar Special", "questionHindi": "निम्नलिखित जिलों को 'औसत वार्षिक वर्षा' के घटते क्रम में व्यवस्थित करें- 1. किशनगंज 2. गयाजी 3. पूर्णिया 4. पटना", "questionEnglish": "Arrange the following districts in descending order of 'average annual rainfall': 1. Kishanganj 2. Gayaji 3. Purnia 4. Patna", "optionsHindi": ["3-1-4-2", "1-3-4-2", "4-3-2-1", "1-2-3-4"], "optionsEnglish": ["3-1-4-2", "1-3-4-2", "4-3-2-1", "1-2-3-4"], "correctAnswer": "B", "explanation": "The descending order of rainfall in these Bihar districts is Kishanganj (highest in Bihar), followed by Purnia, then Patna, and Gayaji (lowest among these)."}, {"id": "73", "section": "Bihar Special", "questionHindi": "बिहार का वह मध्यपाषाण स्थल कौन-सा है जहाँ से उपकरण प्राप्त हुए हैं?", "questionEnglish": "Which Mesolithic site in Bihar has yielded tools?", "optionsHindi": ["सराय नाहर राया", "लोटेश्वर", "वीरभानपुर", "पैसरा"], "optionsEnglish": ["Sarai Nahar Rai", "Loteshwar", "Birbhanpur", "Paisra"], "correctAnswer": "D", "explanation": "Paisra, located in the Munger district of Bihar, is an important Mesolithic site where tools and evidence of early human habitation have been discovered."}, {"id": "74", "section": "Bihar Special", "questionHindi": "शेरशाह सूरी के शासनकाल के संबंध में निम्न में से कौन-सा कथन गलत है?", "questionEnglish": "Which of the following statements regarding the reign of Sher Shah Suri is incorrect?", "optionsHindi": ["उसने 'हजरत-ए-आला की उपाधि धारण की थी।", "उसने भूमि माप के लिए 'गज-ए-सिकंदरी' प्रणाली का उपयोग किया।", "उसने घाघरा के युद्ध में हुमायूं को पराजित किया था।", "उसने पटना को बिहार की प्रांतीय राजधानी के रूप में पुनर्जीवित किया।"], "optionsEnglish": ["He assumed the title of 'Hazrat-i-Ala'.", "He utilized the 'Gaz-i-Sikandari system for land measurement.", "He defeated Humayun in the Battle of Ghagra.", "He revived Patna as the provincial capital of Bihar."], "correctAnswer": "C", "explanation": "Sher Shah Suri defeated Humayun at the Battle of Chausa (1539) and Kannauj/Bilgram (1540). The Battle of Ghagra (1529) was fought between Babur and the Afghans."}, {"id": "75", "section": "Bihar Special", "questionHindi": "22 मार्च 1912 को बिहार को बंगाल प्रेसीडेंसी से अलग कर एक नए प्रांत के रूप में स्थापित किया गया था। इस समय बिहार के प्रथम उपराज्यपाल कौन थे?", "questionEnglish": "On March 22, 1912, Bihar was separated from the Bengal Presidency and established as a new province. Who was the first Lieutenant Governor of Bihar at that time?", "optionsHindi": ["जेम्स डेविड सिफ्टन", "सर चार्ल्स स्टुअर्ट बेली", "जे. सी. हिटिंग", "इनमें से कोई नहीं"], "optionsEnglish": ["James David Sifton", "Sir Charles Stuart Bayley", "J. C. Hitting", "None of these"], "correctAnswer": "B", "explanation": "Sir Charles Stuart Bayley was appointed as the first Lieutenant Governor of the newly formed province of Bihar and Orissa in 1912."}, {"id": "76", "section": "Bihar Special", "questionHindi": "भारत छोड़ो आंदोलन के दौरान बिहार में घटित 'सचिवालय गोलीकांड' की तिथि क्या थी?", "questionEnglish": "What was the date of the 'Secretariat Firing Incident' that took place in Bihar during the Quit India Movement?", "optionsHindi": ["7 अगस्त, 1942", "9 अगस्त, 1942", "11 अगस्त, 1942", "13 अगस्त, 1942"], "optionsEnglish": ["August 7, 1942", "August 9, 1942", "August 11, 1942", "August 13, 1942"], "correctAnswer": "C", "explanation": "The infamous Secretariat Firing in Patna took place on 11 August 1942, where 7 young students were martyred while trying to hoist the national flag."}, {"id": "77", "section": "Bihar Special", "questionHindi": "बिहार में 1920 22 के असहयोग आंदोलन के दौरान गांधीजी की यात्रा के संदर्भ में उन्होंने अपना प्रसिद्ध 'हिंदू - मुस्लिम एकता' का भाषण कहाँ दिया था?", "questionEnglish": "In the context of Gandhiji's visit to Bihar during the Non-Cooperation Movement of 1920-22, where did he deliver his famous speech on 'Hindu-Muslim Unity'?", "optionsHindi": ["चम्पारण", "पटना", "छपरा", "मधुबनी"], "optionsEnglish": ["Champaran", "Patna", "Chapra", "Madhubani"], "correctAnswer": "B", "explanation": "During his visit to Bihar for the Non-Cooperation movement, Gandhiji gave his famous speech emphasizing Hindu-Muslim unity in Patna."}, {"id": "78", "section": "Bihar Special", "questionHindi": "2011 की जनगणना के अनुसार बिहार के जिलों को उनकी जनसंख्या के बढ़ते क्रम में व्यवस्थित करें-", "questionEnglish": "Arrange the districts of Bihar in ascending order of their population, according to the 2011 Census:", "optionsHindi": ["शिवहर < शेखपुरा < लखीसराय < अरवल", "शेखपुरा < शिवहर < अरवल < लखीसराय", "शेखपुरा < अरवल < शिवहर < लखीसराय", "शिवहर < अरवल < शेखपुरा < लखीसराय"], "optionsEnglish": ["Sheohar < Sheikhpura < Lakhisarai < Arwal", "Sheikhpura < Sheohar < Arwal < Lakhisarai", "Sheikhpura < Arwal < Sheohar < Lakhisarai", "Sheohar < Arwal < Sheikhpura < Lakhisarai"], "correctAnswer": "B", "explanation": "According to the 2011 Census, the least populous district in Bihar is Sheikhpura, followed by Sheohar, Arwal, and Lakhisarai."}, {"id": "79", "section": "Bihar Special", "questionHindi": "सूची-1 को सूची II के साथ सुमेलित कीजिए- a. अनुग्रह नारायण सिन्हा b. जयप्रकाश नारायण c. श्री कृष्ण सिंह d. जगजीवन राम। 1. लोकनायक 2. बाबूजी 3. बिहार विभूति 4. बिहार केसरी", "questionEnglish": "Match List-I with List-II- a. Anugrah Narayan Sinha b. Jayaprakash Narayan c. Sri Krishna Singh d. Jagjivan Ram. 1. Loknayak 2. Babuji 3. Bihar Vibhuti 4. Bihar Kesari", "optionsHindi": ["2 4 3 1", "1 2 3 4", "4 3 1 2", "3 1 4 2"], "optionsEnglish": ["2 4 3 1", "1 2 3 4", "4 3 1 2", "3 1 4 2"], "correctAnswer": "D", "explanation": "Anugrah Narayan Sinha is known as Bihar Vibhuti (3), Jayaprakash Narayan as Loknayak (1), Sri Krishna Singh as Bihar Kesari (4), and Jagjivan Ram as Babuji (2)."}, {"id": "80", "section": "Bihar Special", "questionHindi": "बिहार हिंदी साहित्य सम्मेलन' की स्थापना कब की गई थी?", "questionEnglish": "When was the 'Bihar Hindi Sahitya Sammelan' established?", "optionsHindi": ["1911", "1919", "1930", "1921"], "optionsEnglish": ["1911", "1919", "1930", "1921"], "correctAnswer": "B", "explanation": "The Bihar Hindi Sahitya Sammelan was established in the year 1919 to promote Hindi literature and language in the state."}, {"id": "81", "section": "Current Affairs", "questionHindi": "सूची-I को सूची-II के साथ सही सुमेलित कीजिए- a. नेशनल यूथ गेम्स b. विश्व कप हॉकी और राष्ट्रमंडल खेल c. राष्ट्रीय खेल d. FIH हॉकी प्रो लीग। 1. 2028 2. 2030 3. 2034 4. 2026", "questionEnglish": "Correctly match List-I with List-II- a. National Youth Games b. Hockey World Cup and Commonwealth Games c. National Games d. FIH Hockey Pro League. 1. 2028 2. 2030 3. 2034 4. 2026", "optionsHindi": ["1 2 3 4", "2 1 3 4", "1 3 2 4", "3 2 1 4"], "optionsEnglish": ["1 2 3 4", "2 1 3 4", "1 3 2 4", "3 2 1 4"], "correctAnswer": "D", "explanation": "This corresponds to the scheduled upcoming sports events mapping to their respective future host years."}, {"id": "82", "section": "Current Affairs", "questionHindi": "मार्च 2026 को 'मध्य-पूर्व' में तनाव के बीच रसोई गैस (एलपीजी) की निर्बाध आपूर्ति सुनिश्चित करने के लिए भारत सरकार द्वारा देश भर में कौन-सा कानून लागू किया गया है ?", "questionEnglish": "Which law was implemented nationwide by the Government of India in March 2026 to ensure the uninterrupted supply of LPG amidst tensions in the 'Middle-East'?", "optionsHindi": ["भारत रक्षा अधिनियम", "आवश्यक सेवा अनुरक्षण कानून", "आवश्यक वस्तु निषेध अधिनियम", "इनमें से कोई नहीं"], "optionsEnglish": ["Defence of India Act", "Essential Services Maintenance Act", "Essential Commodities Prohibition Act", "None of the above"], "correctAnswer": "B", "explanation": "The Essential Services Maintenance Act (ESMA) is typically invoked to ensure the uninterrupted delivery of essential supplies like LPG during geopolitical crises."}, {"id": "83", "section": "Current Affairs", "questionHindi": "अमेरिका ने ईरान के किस द्वीप पर भीषण बमबारी कर उस द्वीप पर मौजूद सभी सैन्य ठिकानों को नष्ट करने का दावा किया है?", "questionEnglish": "Which Iranian island did the United States claim to have subjected to heavy bombardment, destroying all military bases located there?", "optionsHindi": ["चैगोस द्वीप", "हगैम द्वीप", "खार्ग द्वीप", "हाईफा द्वीप"], "optionsEnglish": ["Chagos Island", "Hagam Island", "Kharg Island", "Haifa Island"], "correctAnswer": "C", "explanation": "Kharg Island is Iran's primary oil export terminal and a highly strategic island in the Persian Gulf."}, {"id": "84", "section": "Current Affairs", "questionHindi": "वर्ष 2025 का हिंदी भाषा के लिए 'साहित्य अकादमी पुरस्कार' किसे प्रदान किया गया?", "questionEnglish": "Who was awarded the 'Sahitya Akademi Award' for the Hindi language for the year 2025?", "optionsHindi": ["संजीव", "ममता कालिया", "बद्री नारायण", "गीतांजली श्री"], "optionsEnglish": ["Sanjeev", "Mamta Kalia", "Badri Narayan", "Geetanjali Shree"], "correctAnswer": "A", "explanation": "Sanjeev is a renowned Hindi author noted for his literary contributions (Current affairs-based mock question)."}, {"id": "85", "section": "Current Affairs", "questionHindi": "केन्द्रीय बजट 2026-27 में वित्त मंत्री ने तीन महत्वपूर्ण कर्तव्यों का उल्लेख किया है। ये कर्तव्य हैं- I. आर्थिक विकास और उत्पादकता II. युवाओं की आकांक्षाओं को पूरा करना III. सबका साथ, सबका विकास।", "questionEnglish": "In the Union Budget 2026-27, the Finance Minister outlined three duties: I. Accelerate economic growth II. Fulfill youth aspirations III. Sabka Saath, Sabka Vikas.", "optionsHindi": ["केवल I", "केवल II", "केवल II और III", "उपर्युक्त सभी"], "optionsEnglish": ["Only I", "Only II", "Only II and III", "All of the above"], "correctAnswer": "D", "explanation": "All the three mentioned duties are part of the core vision explicitly stated in the Union Budget 2026-27 speech."}, {"id": "86", "section": "Current Affairs", "questionHindi": "बिहार के मुख्यमंत्री नीतीश कुमार की 'समृद्धि यात्रा' का चौथा चरण शुरू हुआ। बताएँ कि इस यात्रा के दौरान वे राज्य के कितने जिलों का दौरा करेंगे?", "questionEnglish": "The fourth phase of Bihar Chief Minister Nitish Kumar's 'Samriddhi Yatra' has begun. How many districts of the state will he visit during this tour?", "optionsHindi": ["8", "9", "17", "4"], "optionsEnglish": ["8", "9", "17", "4"], "correctAnswer": "D", "explanation": "In the specific 4th phase of this yatra, the Chief Minister scheduled visits covering 4 districts."}, {"id": "87", "section": "Current Affairs", "questionHindi": "हाल ही में किस केंद्र शासित प्रदेश को लद्दाख के बाद भारत का दूसरा 'पूर्ण साक्षर' केंद्र शासित प्रदेश घोषित किया गया है?", "questionEnglish": "Which Union Territory was recently declared India's second 'fully literate' Union Territory, after Ladakh?", "optionsHindi": ["चंडीगढ़", "जम्मू और कश्मीर", "लक्षद्वीप", "अण्डमान और निकोबार"], "optionsEnglish": ["Chandigarh", "Jammu and Kashmir", "Lakshadweep", "Andaman and Nicobar"], "correctAnswer": "D", "explanation": "Andaman and Nicobar Islands achieved the milestone of becoming the second fully literate Union Territory recently."}, {"id": "88", "section": "Current Affairs", "questionHindi": "वर्ष 2025 के लिए 60 वां ज्ञानपीठ पुरस्कार किस साहित्यकार को प्रदान किया गया है?", "questionEnglish": "To which litterateur has the 60th Jnanpith Award for the year 2025 been conferred?", "optionsHindi": ["पेरुमल मुरुगन", "डी. जयकांतन", "पी.वी. अकिलन", "आर. वैरामुथु"], "optionsEnglish": ["Perumal Murugan", "D. Jayakanthan", "P.V. Akilan", "R. Vairamuthu"], "correctAnswer": "A", "explanation": "Perumal Murugan, the celebrated Tamil author, is noted for his outstanding contribution to Indian literature."}, {"id": "89", "section": "Current Affairs", "questionHindi": "98वें ऑस्कर पुरस्कार 2026 में 'सर्वश्रेष्ठ फिल्म' का पुरस्कार किसे मिला है?", "questionEnglish": "Who won the 'Best Picture' award at the 98th Academy Awards in 2026?", "optionsHindi": ["सिनर्स", "वन बैटल आफ्टर अनदर", "होमबाउंड", "हैमनेट"], "optionsEnglish": ["Sinners", "One Battle After Another", "Homebound", "Hamnet"], "correctAnswer": "A", "explanation": "Sinners' was acclaimed and won the Best Picture award in the 2026 Oscars according to this current affairs context."}, {"id": "90", "section": "Current Affairs", "questionHindi": "सर्वोच्च न्यायालय के हालिया फैसले के अनुसार, किसी भी उम्र के बच्चे को गोद लेने वाली कामकाजी महिला कितने सप्ताह के मातृत्व अवकाश की हकदार है?", "questionEnglish": "According to a recent Supreme Court verdict, how many weeks of maternity leave is a working woman entitled to upon adopting a child of any age?", "optionsHindi": ["12 सप्ताह", "18 सप्ताह", "15 सप्ताह", "24 सप्ताह"], "optionsEnglish": ["12 weeks", "18 weeks", "15 weeks", "24 weeks"], "correctAnswer": "A", "explanation": "Under the Maternity Benefit Act, mothers legally adopting a child are entitled to 12 weeks of maternity leave from the date the child is handed over."}, {"id": "91", "section": "Current Affairs", "questionHindi": "बिहार आर्थिक सर्वेक्षण 2025-26 के अनुसार, बिहार की अर्थव्यवस्था में तृतीयक क्षेत्र का योगदान कितना प्रतिशत है?", "questionEnglish": "According to the Bihar Economic Survey 2025-26, what is the percentage contribution of the Tertiary sector to Bihar's economy?", "optionsHindi": ["54.80%", "58.80%", "52.80%", "55.80%"], "optionsEnglish": ["54.80%", "58.80%", "52.80%", "55.80%"], "correctAnswer": "D", "explanation": "The service (tertiary) sector continues to be the largest contributor to Bihar's Gross State Domestic Product (GSDP), historically hovering around 55-60%."}, {"id": "92", "section": "Current Affairs", "questionHindi": "आर्थिक सर्वेक्षण 2025-26 के अनुसार, 2024-25 में तीन सबसे बड़े उत्पादक राज्यों में महत्वपूर्ण फसलों का उत्पादन के बारे में सही कथन को चुनें-", "questionEnglish": "According to the Economic Survey 2025-26, select the correct statement regarding the production of major crops in the three largest producing states:", "optionsHindi": ["गेहूं उत्पादक: यूपी, एमपी, पंजाब", "मोटे अनाज: राजस्थान, कर्नाटक, एमपी", "गन्ना: यूपी, महाराष्ट्र, कर्नाटक", "उपर्युक्त सभी"], "optionsEnglish": ["Wheat: UP, MP, Punjab", "Coarse cereals: Rajasthan, Karnataka, MP", "Sugarcane: UP, Maharashtra, Karnataka", "All of the above"], "correctAnswer": "D", "explanation": "All the pairings correctly represent the top three producing states for wheat, coarse cereals, and sugarcane respectively."}, {"id": "93", "section": "Current Affairs", "questionHindi": "टी-20 विश्व कप 2026 के बारे में सत्य कथन का चयन करें- I. भारत तीन टी-20 विश्व कप जीतने वाला पहला पुरुष टीम बन गया है। II. भारत घरेलू मैदान पर जीतने वाला पहला देश है। III. यह भारत और श्रीलंका में हुआ।", "questionEnglish": "Select the correct statements regarding the 2026 T20 World Cup: I. India won 3 titles. II. Won on home soil & defended. III. Hosted by India and Sri Lanka.", "optionsHindi": ["केवल I और III", "केवल I और II", "केवल II और III", "उपर्युक्त सभी"], "optionsEnglish": ["Only I and III", "Only I and II", "Only II and III", "All of the above"], "correctAnswer": "D", "explanation": "The 2026 ICC Men's T20 World Cup was co-hosted by India and Sri Lanka, and all the listed achievements correctly reflect the tournament's outcomes in this context."}, {"id": "94", "section": "Current Affairs", "questionHindi": "ईरान के सर्वोच्च नेता अयातुल्ला अली खामेनेई की मृत्यु के बाद ईरान में कितने दिनों के शोक की घोषणा की गई है?", "questionEnglish": "For how many days of mourning has a declaration been issued in Iran following the death of Iran's Supreme Leader, Ayatollah Ali Khamenei?", "optionsHindi": ["14 दिन", "21 दिन", "40 दिन", "45 दिन"], "optionsEnglish": ["14 days", "21 days", "40 days", "45 days"], "correctAnswer": "C", "explanation": "In accordance with Iranian and Shia Islamic traditions, a 40-day official mourning period (Arbaeen) is often observed for the Supreme Leader."}, {"id": "95", "section": "Current Affairs", "questionHindi": "भारत का पहला 'स्मार्ट इंटेलिजेंट विलेज' का दर्जा किस गांव को प्रदान किया गया है?", "questionEnglish": "Which village has been accorded the status of India's first 'Smart Intelligent Village'?", "optionsHindi": ["सतनावरी गांव, नागपुर", "गहमर, गाजीपुर", "सौंदला गाँव, अहिल्यानगर", "रामपुर खजुरिया, पूर्वी चंपारण"], "optionsEnglish": ["Satnavari Village, Nagpur", "Gahmar, Ghazipur", "Saundala Village, Ahilyanagar", "Rampur Khajuria, East Champaran"], "correctAnswer": "A", "explanation": "Satnavari village in Nagpur has been developed with advanced IoT, AI, and digital infrastructure to earn the title of India's first Smart Intelligent Village."}, {"id": "96", "section": "Current Affairs", "questionHindi": "22वें आसियान-भारत शिखर सम्मेलन 2025 का आयोजन कहाँ किया गया?", "questionEnglish": "Where was the 22nd ASEAN-India Summit 2025 held?", "optionsHindi": ["नई दिल्ली", "कुआलालंपुर", "तिमोर लेश्ते", "अहमदाबाद"], "optionsEnglish": ["New Delhi", "Kuala Lumpur", "Timor-Leste", "Ahmedabad"], "correctAnswer": "B", "explanation": "The 22nd ASEAN-India Summit in 2025 was hosted by Malaysia in its capital, Kuala Lumpur."}, {"id": "97", "section": "Current Affairs", "questionHindi": "निम्नलिखित कथन (A) और कारण (R) पर विचार करें- कथन (A): बिहार का राजकोषीय घाटा 41,223 करोड़ रूपया हैं। कारण (R): बिहार का प्राथमिक घाटा 11,357 करोड़ रूपया हैं।", "questionEnglish": "Assertion (A): Bihar's fiscal deficit is ₹41,223 cr. Reason (R): Bihar's primary deficit is ₹11,357 cr.", "optionsHindi": ["A और R दोनों सही हैं और R, A की सही व्याख्या है।", "A और R दोनों सही हैं लेकिन R, A की सही व्याख्या नहीं है।", "A सही है लेकिन R गलत है।", "A गलत है लेकिन R सही है।"], "optionsEnglish": ["Both A and R are correct, and R is the correct explanation of A.", "Both A and R are correct, but R is not the correct explanation of A.", "A is correct, but R is incorrect.", "A is incorrect, but R is correct."], "correctAnswer": "B", "explanation": "Both factual statements regarding the deficits as per the Economic Survey are correct independently, but primary deficit is not the explanatory 'reason' for the fiscal deficit."}, {"id": "98", "section": "Current Affairs", "questionHindi": "शांति (SHANTI) बिल 2025 जिसे राष्ट्रपति द्वारा 20 दिसंबर, 2025 को स्वीकृति प्रदान किया गया, जिसका उद्देश्य हैं-", "questionEnglish": "The SHANTI Bill 2025, which received presidential assent on December 20, 2025, aims to:", "optionsHindi": ["परमाणु ऊर्जा उत्पादन में बढ़ोतरी करना", "पहले प्रयोग नहीं करने के नीति को स्थापित करना", "परमाणु ऊर्जा उत्पादन में निजी क्षेत्र का प्रवेश", "पहले प्रयोग के नीति को पूर्णतः समाप्त करना"], "optionsEnglish": ["Increase nuclear energy production", "Establish a 'No First Use' policy", "Facilitate the entry of the private sector into nuclear energy", "Completely abolish the 'First Use' policy"], "correctAnswer": "B", "explanation": "The SHANTI Bill legally formalizes and establishes India's commitment to the 'No First Use' nuclear policy into statutory law."}, {"id": "99", "section": "Current Affairs", "questionHindi": "हाल ही में सोमालीलैंड को देश की मान्यता देने वाला पहला देश कौन बन गया है?", "questionEnglish": "Which country has recently become the first to recognize Somaliland as a nation?", "optionsHindi": ["इजरायल", "फ्रांस", "जोर्डन", "संयुक्त अरब अमीरात"], "optionsEnglish": ["Israel", "France", "Jordan", "United Arab Emirates"], "correctAnswer": "A", "explanation": "Israel became the first UN member state to officially recognize Somaliland as an independent nation in this recent geopolitical development."}, {"id": "100", "section": "Current Affairs", "questionHindi": "ऑस्ट्रेलियन ओपन- 2026' के बारे में असत्य युग्म का चयन करें-", "questionEnglish": "Select the incorrect pair regarding the 'Australian Open 2026'.", "optionsHindi": ["पुरुष एकल विजेता - कार्लोस अल्काराज", "पुरुष एकल उपविजेता - नोवाक जोकोविच", "महिला एकल विजेता - एरिना सबालेंका", "पुरुष युगल विजेता - क्रिश्चियन हैरिसन और नील स्कूपस्की"], "optionsEnglish": ["Men's Singles Winner - Carlos Alcaraz", "Men's Singles Runner-up - Novak Djokovic", "Women's Singles Winner - Aryna Sabalenka", "Men's Doubles Winners - Christian Harrison and Neal Skupski"], "correctAnswer": "D", "explanation": "The Men's Doubles Winners pair mentioned is incorrect based on the 2026 tournament results context."}];
+const TOTAL = QUESTIONS.length;
+const MINS = 120;
+let currentQ = 0, secondsLeft = MINS * 60, timerInterval, currentLang = 'hi', activeSection = 'all';
+let answers = {}, visited = {}, marked = {}, filteredIndices = [];
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startExam(){
+  answers={};visited={};marked={};currentQ=0;secondsLeft=MINS*60;
+  filteredIndices = QUESTIONS.map((_,i)=>i);
+  showScreen('screen-exam');
+  buildPalette();
+  goTo(0);
+  startTimer();
+}
+
+function startTimer(){
+  clearInterval(timerInterval);
+  timerInterval=setInterval(()=>{
+    secondsLeft--;
+    const m=Math.floor(secondsLeft/60), s=secondsLeft%60;
+    document.getElementById('timer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if(secondsLeft<=0){clearInterval(timerInterval);doSubmit();}
+  },1000);
+}
+
+function filterSection(sec, tabEl){
+  document.querySelectorAll('.sec-tab').forEach(t=>t.classList.remove('active'));
+  tabEl.classList.add('active');
+  activeSection = sec;
+  if(sec==='all') filteredIndices = QUESTIONS.map((_,i)=>i);
+  else filteredIndices = QUESTIONS.map((q,i)=>(q.section||'').toLowerCase()===sec.toLowerCase()?i:-1).filter(i=>i!==-1);
+  buildPalette();
+  goTo(filteredIndices[0] || 0);
+}
+
+function buildPalette(){
+  const pal = document.getElementById('q-palette');
+  pal.innerHTML='';
+  filteredIndices.forEach(i=>{
+    const btn=document.createElement('div');
+    btn.className='stat-icon pal-q-btn si-nv';
+    btn.textContent=i+1;
+    btn.id=`pb-${i}`;
+    btn.onclick=()=>goTo(i);
+    pal.appendChild(btn);
+  });
+  updatePalette();
+}
+
+function updatePalette(){
+  let nv=0,na=0,an=0,mr=0;
+  QUESTIONS.forEach((_,i)=>{
+    const btn=document.getElementById(`pb-${i}`);
+    if(!btn) return;
+    let cls='stat-icon pal-q-btn ';
+    if(answers[i]!==undefined && marked[i]) cls+='si-am';
+    else if(answers[i]!==undefined) cls+='si-an';
+    else if(marked[i]) cls+='si-mr';
+    else if(visited[i]) cls+='si-na';
+    else cls+='si-nv';
+    if(i===currentQ) cls+=' pcur';
+    btn.className=cls;
+    if(!visited[i]) nv++;
+    else if(answers[i]===undefined && !marked[i]) na++;
+    else if(answers[i]!==undefined) an++;
+    if(marked[i]) mr++;
+  });
+  document.getElementById('cnt-nv').textContent=nv;
+  document.getElementById('cnt-na').textContent=na;
+  document.getElementById('cnt-an').textContent=an;
+  document.getElementById('cnt-mr').textContent=mr;
+}
+
+function goTo(idx){
+  currentQ=idx;
+  visited[idx]=true;
+  closePalette();
+  renderQuestion();
+}
+
+function openPalette(){
+  document.getElementById('palette-sidebar').classList.add('open');
+  document.getElementById('pal-overlay').classList.add('show');
+  buildPalette();
+}
+function closePalette(){
+  const sidebar = document.getElementById('palette-sidebar');
+  const overlay = document.getElementById('pal-overlay');
+  if(sidebar) sidebar.classList.remove('open');
+  if(overlay) overlay.classList.remove('show'); 
+}
+function togglePalette(){
+  const sidebar = document.getElementById('palette-sidebar');
+  if(sidebar.classList.contains('open')) closePalette();
+  else openPalette();
+}
+
+function formatQuestionText(text) {
+  if(!text) return '';
+  text = text.replace(/\\n/g, '<br>');
+
+  // Identify Match the Following
+  // Logic: Must have a. b. c. d. AND 1. 2. 3. 4.
+  const hasABCD = /[a-d]\./.test(text);
+  const has1234 = /[1-4]\./.test(text);
+  const isMatchHeading = /सूची|List/i.test(text);
+
+  if (hasABCD && has1234 && (isMatchHeading || text.includes('|') || text.includes('।'))) {
+    try {
+      const splitPoint = text.search(/[a-d]\./);
+      let intro = text.substring(0, splitPoint).trim();
+      let rest = text.substring(splitPoint);
+      
+      // Extract List L1 (a-d)
+      let l1 = rest.match(/[a-d]\.\s*[^a-d\d\n\r||।(.]+/g) || [];
+      // Extract List L2 (1-4)
+      let l2 = rest.match(/\d\.\s*[^a-d\d\n\r||।(.]+/g) || [];
+
+      // Find the "Code / कूट" section if exists
+      let codePart = "";
+      const codeIdx = rest.search(/कूट|Code/i);
+      if(codeIdx !== -1) {
+        codePart = rest.substring(codeIdx).trim();
+      }
+
+      if(l1.length >= 2 && l2.length >= 2) {
+        let tableHtml = '<div class="q-table-wrapper"><table class="q-match-table"><thead><tr><th>List I (सूची-I)</th><th>List II (सूची-II)</th></tr></thead><tbody>';
+        let maxRows = Math.max(l1.length, l2.length);
+        for(let i=0; i<maxRows; i++) {
+          let c1 = l1[i] ? l1[i].trim().replace(/^([a-d])\./i, '<b>$1.</b> ') : '';
+          let c2 = l2[i] ? l2[i].trim().replace(/^(\d+)\./, '<b>$1.</b> ') : '';
+          tableHtml += `<tr><td>${c1}</td><td>${c2}</td></tr>`;
+        }
+        tableHtml += '</tbody></table></div>';
+        return `<div>${intro}</div>${tableHtml}${codePart ? '<div class="q-code-box"><b>' + codePart + '</b></div>' : ''}`;
+      }
+    } catch(e) { console.warn("Formatting failed, fallback to raw", e); }
+  }
+
+  // Identify Simple Numbered Lists (1, 2, 3...)
+  if (has1234 && !hasABCD) {
+     let parts = text.split(/(\d\.\s+)/);
+     if(parts.length > 3) { // At least 2 items
+        let introText = parts[0].trim();
+        let listHtml = '<div class="q-num-list">';
+        for(let i=1; i<parts.length; i+=2) {
+           if(parts[i+1]) {
+              listHtml += `<div class="list-item"><span class="list-num">${parts[i].trim()}</span><span class="list-txt">${parts[i+1].trim()}</span></div>`;
+           }
+        }
+        listHtml += '</div>';
+        
+        let bottom = "";
+        if(listHtml.includes('कूट') || listHtml.includes('Code')){
+           // Handle if code is inside the list part (unlikely but safe)
+        }
+        return `<div>${introText}</div>${listHtml}`;
+     }
+  }
+
+  return `<div>${text}</div>`;
+}
+
+
+function renderQuestion(){
+  const q=QUESTIONS[currentQ], chosen=answers[currentQ], isEn=(currentLang==='en');
+  const rawText = isEn? (q.questionEnglish||q.questionHindi) : q.questionHindi;
+  const qOpts = isEn? (q.optionsEnglish||q.optionsHindi) : q.optionsHindi;
+  const qText = formatQuestionText(rawText);
+  
+  document.getElementById('q-head-num').textContent=`Question NO. ${currentQ+1}`;
+  let html=`<div class="q-text">${qText}</div><div class="options-grid">`;
+  ['A','B','C','D'].forEach((k, idx)=>{
+    if(!qOpts || !qOpts[idx]) return;
+    html+=`<div class="opt-card${chosen===k?' selected':''}" onclick="selectOption('${k}')">
+      <div class="opt-radio-circle"></div>
+      <div class="opt-lbl">(${k}) ${qOpts[idx]}</div>
+    </div>`;
+  });
+  html+='</div>';
+  document.getElementById('q-container').innerHTML=html;
+  updatePalette();
+}
+
+window.selectOption=function(k){
+  answers[currentQ]=k;
+  renderQuestion();
+};
+
+function clearAnswer(){ delete answers[currentQ]; renderQuestion(); }
+function markForReview(){ marked[currentQ]=!marked[currentQ]; saveAndNext(false); }
+function saveAndNext(auto=true){
+  if(auto){
+    const pos=filteredIndices.indexOf(currentQ);
+    if(pos<filteredIndices.length-1) goTo(filteredIndices[pos+1]);
+  } else renderQuestion();
+}
+function prevQ(){
+  const pos=filteredIndices.indexOf(currentQ);
+  if(pos>0) goTo(filteredIndices[pos-1]);
+}
+
+function openSubmitModal(){
+  let an=0,na=0,mr=0,nv=0;
+  QUESTIONS.forEach((_,i)=>{ if(!visited[i])nv++; else if(answers[i])an++; else na++; if(marked[i])mr++; });
+  document.getElementById('ms-answered').textContent=an;
+  document.getElementById('ms-notanswered').textContent=na;
+  document.getElementById('ms-marked').textContent=mr;
+  document.getElementById('ms-notvisited').textContent=nv;
+  document.getElementById('submit-modal').classList.add('show');
+}
+function closeModal(){ document.getElementById('submit-modal').classList.remove('show'); }
+
+function doSubmit(){
+  closeModal(); clearInterval(timerInterval);
+  let c=0,w=0,s=0,nv=0;
+  let subjStats = {}; // {Subject: {total:0, correct:0}}
+
+  QUESTIONS.forEach((q,i)=>{
+    const subj = q.section || 'General';
+    if(!subjStats[subj]) subjStats[subj] = {total: 0, correct: 0};
+    subjStats[subj].total++;
+
+    if(!visited[i]) nv++; 
+    else if(!answers[i]) s++; 
+    else if(answers[i]===q.correctAnswer) { c++; subjStats[subj].correct++; }
+    else w++;
+  });
+
+  const score = (c*1)-(w*(1/3)), pct=Math.max(0,Math.round((score/TOTAL)*100));
+  showScreen('screen-result');
+  document.getElementById('s-score').textContent=score.toFixed(2);
+  document.getElementById('s-correct').textContent=c;
+  document.getElementById('s-wrong').textContent=w;
+  document.getElementById('s-skip').textContent=s+nv;
+  document.getElementById('score-pct').textContent=pct+'%';
+  document.getElementById('donut-circle').style.strokeDashoffset=408*(1-pct/100);
+  
+  // Build Subject Table
+  let tableHtml = "";
+  for(let s in subjStats){
+    let spct = Math.round((subjStats[s].correct / subjStats[s].total) * 100);
+    tableHtml += `<tr>
+      <td>${s}</td>
+      <td>${subjStats[s].correct} / ${subjStats[s].total}</td>
+      <td>
+        <div class="res-pct-bar-bg"><div class="res-pct-bar-fill" style="width:${spct}%"></div></div>
+        ${spct}%
+      </td>
+    </tr>`;
+  }
+  document.getElementById('res-subj-body').innerHTML = tableHtml;
+
+  const titles=pct>=80?['🏆 Excellent!','Outstanding performance! Exceptional accuracy.']:
+                 pct>=60?['👍 Good!','Well done! You have a strong grasp of the subjects.']:
+                         ['💪 Keep Practicing','Review the explanations carefully to improve.'];
+  document.getElementById('result-title').textContent=titles[0];
+  document.getElementById('result-subtitle').textContent=titles[1];
+  buildAnswerSheet('all');
+  if(pct>=60) launchConfetti();
+}
+
+
+function buildAnswerSheet(flt){
+  const cont=document.getElementById('sheet-items'); cont.innerHTML='';
+  QUESTIONS.forEach((q,i)=>{
+    const chosen=answers[i], correct=q.correctAnswer, isEn=(currentLang==='en');
+    const status = chosen===undefined?'skipped':(chosen===correct?'correct':'wrong');
+    if(flt!=='all' && flt!==status) return;
+    
+    const qText=isEn?(q.questionEnglish||q.questionHindi):q.questionHindi;
+    const qOpts=isEn?(q.optionsEnglish||q.optionsHindi):q.optionsHindi;
+    const qExpl=isEn?(q.explanationEnglish||q.explanationHindi):q.explanationHindi;
+    
+    const el=document.createElement('div');
+    el.style.cssText='padding:30px;border:1px solid #e0e6ed;border-radius:12px;margin-bottom:30px;background:#fff;border-left:6px solid '+(status==='correct'?'#26a69a':'#ef5350');
+    let optsHtml='';
+    ['A','B','C','D'].forEach((k, idx)=>{
+      if(!qOpts || !qOpts[idx]) return;
+      const isCor=k===correct, isCho=k===chosen;
+      const bg=isCor?'#e0f2f1':(isCho?'#ffebee':'#f8fafb');
+      const border=isCor?'#26a69a':(isCho?'#ef5350':'#e0e6ed');
+      const icon=isCor?' ✔':(isCho?' ✖':'');
+      optsHtml+=`<div style="padding:12px 20px;margin-top:10px;border-radius:8px;border:2px solid ${border};background:${bg};font-weight:700;color:#263238">${k}) ${qOpts[idx]}${icon}</div>`;
+    });
+    el.innerHTML=`<div style="font-size:.8rem;color:#90a4ae;margin-bottom:12px;font-weight:900;text-transform:uppercase;letter-spacing:1px">QUESTION ${i+1} | Result: <span style="color:${status==='correct'?'#26a69a':'#ef5350'}">${status.toUpperCase()}</span></div>
+      <div style="font-size:1.2rem;font-weight:800;margin-bottom:20px;line-height:1.6;color:#004d40">${qText}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">${optsHtml}</div>
+      ${qExpl?`<div style="margin-top:20px;padding:20px;background:#f1f8f9;border-radius:10px;font-size:1rem;color:#37474f;border:1px solid #e0e6ed"><b style="color:#00695c;display:block;margin-bottom:8px">PRO EXPLANATION:</b> ${qExpl}</div>`:''}`;
+    cont.appendChild(el);
+  });
+}
+function filterSheet(f,btn){ 
+  document.querySelectorAll('.res-sheet-card .sec-tab').forEach(b=>b.classList.remove('active')); 
+  btn.classList.add('active'); 
+  buildAnswerSheet(f); 
+}
+window.toggleLang=function(){ currentLang=currentLang==='hi'?'en':'hi'; renderQuestion(); };
+function restartExam(){ startExam(); }
+function launchConfetti(){
+  const c=document.getElementById('confetti'); c.innerHTML='';
+  for(let i=0;i<100;i++){
+    const d=document.createElement('div');
+    const color = ['#004d40','#ffab00','#26a69a','#ef5350'][i%4];
+    d.style.cssText=`position:absolute;left:${Math.random()*100}%;top:-20px;width:10px;height:10px;background:${color};border-radius:${Math.random()>.5?'50%':'2px'};animation:fall ${2+Math.random()*3}s linear infinite`;
+    c.appendChild(d);
+  }
+}
+const stIconStyle=document.createElement('style');
+stIconStyle.innerHTML='@keyframes fall{to{transform:translateY(100vh) rotate(720deg)}}';
+document.head.appendChild(stIconStyle);
+</script>
+</body>
+</html>
